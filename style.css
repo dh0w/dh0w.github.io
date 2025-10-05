@@ -19,23 +19,23 @@ body {
 .header {
   background: #1a1a1a;
   border-bottom: 2px solid #3a3a3a;
-  padding: 1.5rem 0;
+  padding: 1.275rem 0;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
 .header-content {
-  max-width: 1200px;
+  max-width: 1020px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1.7rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .header h1 {
-  font-size: 1.8rem;
+  font-size: 1.53rem;
   font-weight: 600;
   margin: 0;
   color: #f5f5f5;
@@ -45,17 +45,17 @@ body {
 .copy-button {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.425rem;
   background: #2a2a2a;
   border: 1px solid #444;
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
+  border-radius: 5.1px;
+  padding: 0.425rem 0.6375rem;
   color: #aaa;
-  font-size: 0.9rem;
+  font-size: 0.765rem;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: monospace;
-  max-width: 150px;
+  max-width: 127.5px;
   overflow: hidden;
 }
 
@@ -78,40 +78,40 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1020px;
   width: 100%;
   margin: 0 auto;
-  padding: 2rem 2rem 3rem 2rem;
+  padding: 1.7rem 1.7rem 2.55rem 1.7rem;
   flex: 1;
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2.125rem;
   font-weight: 300;
   text-align: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.425rem;
   color: #f5f5f5;
 }
 
 .subtitle {
   text-align: center;
   color: #888;
-  margin-bottom: 2rem;
-  font-size: 1.3rem;
+  margin-bottom: 1.7rem;
+  font-size: 1.105rem;
   font-weight: 300;
 }
 
 .controls {
   background: #252525;
-  padding: 2rem;
-  border-radius: 12px;
+  padding: 1.7rem;
+  border-radius: 10.2px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  margin-bottom: 2rem;
+  margin-bottom: 1.7rem;
   border: 1px solid #333;
 }
 
 .control-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.275rem;
 }
 
 .control-group:last-child {
@@ -120,12 +120,12 @@ h1 {
 
 label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.7225rem;
   font-weight: 500;
   color: #999;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.425rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.425px;
 }
 
 /* Custom file input */
@@ -143,10 +143,10 @@ label {
 
 .file-input-label {
   display: block;
-  padding: 1rem;
+  padding: 0.85rem;
   background: #2f2f2f;
   border: 2px dashed #444;
-  border-radius: 8px;
+  border-radius: 6.8px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -222,11 +222,11 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 
 .slider-value {
-  min-width: 50px;
+  min-width: 42.5px;
   text-align: right;
   font-weight: 600;
   color: #aaa;
-  font-size: 1rem;
+  font-size: 0.85rem;
 }
 
 /* Buttons */
@@ -238,12 +238,12 @@ input[type="range"]::-moz-range-thumb:hover {
 
 button {
   flex: 1;
-  min-width: 150px;
-  padding: 0.875rem 1.5rem;
-  font-size: 1rem;
+  min-width: 127.5px;
+  padding: 0.74375rem 1.275rem;
+  font-size: 0.85rem;
   font-weight: 500;
   border: none;
-  border-radius: 8px;
+  border-radius: 6.8px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: inherit;
@@ -285,23 +285,23 @@ button:disabled {
 }
 
 .preview-label {
-  font-size: 0.85rem;
+  font-size: 0.7225rem;
   font-weight: 500;
   color: #999;
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.425px;
 }
 
 .preview {
   width: 100%;
   max-width: 100%;
-  height: 60vh;
+  height: 51vh;
   background: #252525;
   border: 1px solid #333;
-  border-radius: 12px;
+  border-radius: 10.2px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  padding: 2rem;
+  padding: 1.7rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -333,19 +333,19 @@ pre#asciiOutput:empty::after {
   content: 'Your ASCII art will appear here';
   color: #555;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  font-size: 1rem;
+  font-size: 0.85rem;
   white-space: normal;
   display: block;
-  padding: 2rem;
+  padding: 1.7rem;
 }
 
 /* Footer */
 .footer {
   background: #1a1a1a;
-  padding: 1.5rem 2rem;
+  padding: 1.275rem 1.7rem;
   text-align: center;
   color: #888;
-  font-size: 0.95rem;
+  font-size: 0.8075rem;
   border-top: 1px solid #333;
 }
 
