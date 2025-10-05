@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ASCII Image Converter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>ASCII Image Converter</h1>
+      <button class="copy-button" id="copyButton">
+        <span class="copy-text">Coming...soon</span>
+        <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <p class="subtitle">Transform your images into beautiful ASCII art</p>
+
+    <div class="controls">
+      <div class="control-group">
+        <label>Upload Image</label>
+        <div class="file-input-wrapper">
+          <input type="file" id="fileInput" accept="image/*" />
+          <label for="fileInput" class="file-input-label" id="fileLabel">
+            Choose an image file
+          </label>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Resolution</label>
+        <div class="slider-container">
+          <div class="slider-wrapper">
+            <input type="range" id="resolutionSlider" min="50" max="1000" value="250" />
+          </div>
+          <span class="slider-value" id="resolutionValue">50%</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="button-group">
+          <button id="convertBtn">Convert to ASCII</button>
+          <button id="downloadTxtBtn" disabled>Download TXT</button>
+          <button id="downloadPngBtn" disabled>Download PNG</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-label">Preview</div>
+      <div class="preview">
+        <div class="preview-wrapper" id="previewWrapper">
+          <pre id="asciiOutput"></pre>
+        </div>
+      </div>
+    </div>
+
+    <canvas id="asciiCanvas"></canvas>
+  </div>
+
+  <div class="footer">
+    🔒 All image processing happens locally in your browser. Your images are never uploaded or saved.
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
