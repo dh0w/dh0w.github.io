@@ -104,10 +104,13 @@ async function convertSelectedFile() {
   const glyphW = measureGlyphWidth(fontFamily, defaultFS);
   const asciiW = cols * glyphW;
   const asciiH = rows * defaultFS;
-  const container = asciiOutput.parentElement;
-  const cw = container.clientWidth;
-  const ch = container.clientHeight;
-  const scale = Math.min(cw / asciiW, ch / asciiH);
+  
+  // Get the wrapper's actual dimensions (accounting for padding)
+  const wrapperRect = previewWrapper.getBoundingClientRect();
+  const availableWidth = wrapperRect.width - 64; // subtract padding (2rem * 2 = 4rem ≈ 64px)
+  const availableHeight = wrapperRect.height - 64;
+  
+  const scale = Math.min(availableWidth / asciiW, availableHeight / asciiH, 1);
 
   asciiOutput.style.cssText = `
     font-family: ${fontFamily}, monospace;

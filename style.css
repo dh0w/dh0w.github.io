@@ -296,7 +296,7 @@ button:disabled {
 .preview {
   width: 100%;
   max-width: 100%;
-  min-height: 200px;
+  height: 60vh;
   background: transparent;
   border-radius: 12px;
   overflow: visible;
@@ -311,10 +311,12 @@ button:disabled {
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  display: inline-block;
-  max-width: 100%;
-  max-height: 60vh;
-  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 90%;
+  overflow: hidden;
 }
 
 pre#asciiOutput {
