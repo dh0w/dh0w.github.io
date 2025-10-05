@@ -3,7 +3,6 @@ const fileInput      = document.getElementById("fileInput");
 const fileLabel      = document.getElementById("fileLabel");
 const convertBtn     = document.getElementById("convertBtn");
 const asciiOutput    = document.getElementById("asciiOutput");
-const previewWrapper = document.getElementById("previewWrapper");
 const resolutionSlider = document.getElementById("resolutionSlider");
 const resolutionValue = document.getElementById("resolutionValue");
 const downloadTxtBtn = document.getElementById("downloadTxtBtn");
@@ -105,10 +104,11 @@ async function convertSelectedFile() {
   const asciiW = cols * glyphW;
   const asciiH = rows * defaultFS;
   
-  // Get the wrapper's actual dimensions (accounting for padding)
-  const wrapperRect = previewWrapper.getBoundingClientRect();
-  const availableWidth = wrapperRect.width - 64; // subtract padding (2rem * 2 = 4rem ≈ 64px)
-  const availableHeight = wrapperRect.height - 64;
+  // Get the preview container's actual dimensions (accounting for padding)
+  const previewContainer = document.querySelector('.preview');
+  const containerRect = previewContainer.getBoundingClientRect();
+  const availableWidth = containerRect.width - 64; // subtract padding (2rem * 2 = 4rem ≈ 64px)
+  const availableHeight = containerRect.height - 64;
   
   const scale = Math.min(availableWidth / asciiW, availableHeight / asciiH, 1);
 
@@ -122,9 +122,6 @@ async function convertSelectedFile() {
     display: inline-block;
   `;
   asciiOutput.textContent = trimmedAscii;
-
-  // Update wrapper to fit content
-  previewWrapper.style.display = 'inline-block';
 
   const lines = trimmedAscii.split("\n").filter(l => l);
   if (!lines.length) {

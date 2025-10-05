@@ -297,26 +297,23 @@ button:disabled {
   width: 100%;
   max-width: 100%;
   height: 60vh;
-  background: transparent;
-  border-radius: 12px;
-  overflow: visible;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.preview-wrapper {
   background: #252525;
   border: 1px solid #333;
   border-radius: 12px;
-  padding: 2rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  padding: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
-  height: 90%;
   overflow: hidden;
+}
+
+.preview-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 pre#asciiOutput {
