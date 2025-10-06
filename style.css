@@ -105,9 +105,14 @@ h1 {
   background: #252525;
   padding: 1.445rem;
   border-radius: 8.67px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 0 20px rgba(255, 200, 100, 0.15), 0 2px 8px rgba(0,0,0,0.3);
   margin-bottom: 1.445rem;
-  border: 1px solid #333;
+  border: 1px solid rgba(255, 200, 100, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.controls:hover {
+  box-shadow: 0 0 30px rgba(255, 200, 100, 0.25), 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .control-group {
@@ -128,25 +133,82 @@ label {
   letter-spacing: 0.36125px;
 }
 
+/* Color controls - compact layout */
+.color-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.7225rem;
+  align-items: start;
+}
+
+.color-mode-group,
+.text-color-group,
+.bg-color-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.color-mode-group label,
+.text-color-group label,
+.bg-color-group label {
+  margin-bottom: 0.36125rem;
+}
+
+/* Mode toggle */
+.mode-toggle {
+  display: flex;
+  gap: 0.36125rem;
+}
+
+.mode-option {
+  flex: 1;
+  padding: 0.6rem;
+  background: #2f2f2f;
+  color: #aaa;
+  border: 2px solid #444;
+  border-radius: 5.78px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.65rem;
+  min-width: auto;
+  white-space: nowrap;
+}
+
+.mode-option:hover {
+  border-color: #555;
+  background: #333;
+}
+
+.mode-option.active {
+  border-color: rgba(255, 200, 100, 0.6);
+  background: rgba(255, 200, 100, 0.1);
+  color: #ffc868;
+}
+
 /* Color inputs */
 .color-input-container {
   display: flex;
-  gap: 0.7225rem;
+  gap: 0.5rem;
   align-items: center;
 }
 
 input[type="color"] {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   border: 1px solid #444;
   border-radius: 5.78px;
   background: #2f2f2f;
   cursor: pointer;
   padding: 0;
+  transition: all 0.2s ease;
+}
+
+input[type="color"]:hover {
+  border-color: #555;
 }
 
 input[type="color"]::-webkit-color-swatch-wrapper {
-  padding: 4px;
+  padding: 3px;
 }
 
 input[type="color"]::-webkit-color-swatch {
@@ -159,10 +221,11 @@ input[type="text"]#textColorHex {
   background: #2f2f2f;
   border: 1px solid #444;
   border-radius: 5.78px;
-  padding: 0.7225rem;
+  padding: 0.6rem;
   color: #aaa;
   font-family: monospace;
-  font-size: 0.7225rem;
+  font-size: 0.65rem;
+  transition: all 0.2s ease;
 }
 
 input[type="text"]#textColorHex:focus {
@@ -174,19 +237,19 @@ input[type="text"]#textColorHex:focus {
 /* Background toggle */
 .background-toggle {
   display: flex;
-  gap: 0.7225rem;
+  gap: 0.5rem;
 }
 
 .bg-option {
   flex: 1;
-  padding: 0.7225rem;
+  padding: 0.6rem;
   background: #2f2f2f;
   color: #aaa;
   border: 2px solid #444;
   border-radius: 5.78px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.7225rem;
+  font-size: 0.65rem;
   min-width: auto;
 }
 
@@ -199,6 +262,12 @@ input[type="text"]#textColorHex:focus {
   border-color: #5a9f6f;
   background: #2a3d2f;
   color: #90d4a8;
+}
+
+/* Hide text color controls in dynamic mode */
+.text-color-group.hidden {
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 /* Custom file input */
@@ -428,11 +497,15 @@ canvas {
 
 @media (max-width: 768px) {
   .header h1 {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
+  }
+
+  .color-controls {
+    grid-template-columns: 1fr;
   }
 
   .button-group {

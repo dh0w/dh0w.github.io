@@ -44,19 +44,29 @@
         </div>
       </div>
 
-      <div class="control-group">
-        <label>Text Color</label>
-        <div class="color-input-container">
-          <input type="color" id="textColorPicker" value="#ffffff" />
-          <input type="text" id="textColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff" />
+      <div class="control-group color-controls">
+        <div class="color-mode-group">
+          <label>Color Mode</label>
+          <div class="mode-toggle">
+            <button type="button" class="mode-option active" data-mode="static">Static</button>
+            <button type="button" class="mode-option" data-mode="dynamic">Dynamic RGB</button>
+          </div>
         </div>
-      </div>
 
-      <div class="control-group">
-        <label>Background Color</label>
-        <div class="background-toggle">
-          <button type="button" class="bg-option active" data-color="#000000">Black</button>
-          <button type="button" class="bg-option" data-color="#ffffff">White</button>
+        <div class="text-color-group" id="textColorGroup">
+          <label>Text Color</label>
+          <div class="color-input-container">
+            <input type="color" id="textColorPicker" value="#ffffff" />
+            <input type="text" id="textColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff" />
+          </div>
+        </div>
+
+        <div class="bg-color-group">
+          <label>Background</label>
+          <div class="background-toggle">
+            <button type="button" class="bg-option active" data-color="#000000">Black</button>
+            <button type="button" class="bg-option" data-color="#ffffff">White</button>
+          </div>
         </div>
       </div>
 

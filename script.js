@@ -7,6 +7,8 @@ const resolutionSlider = document.getElementById("resolutionSlider");
 const resolutionValue = document.getElementById("resolutionValue");
 const textColorPicker = document.getElementById("textColorPicker");
 const textColorHex = document.getElementById("textColorHex");
+const textColorGroup = document.getElementById("textColorGroup");
+const modeOptions = document.querySelectorAll(".mode-option");
 const bgOptions = document.querySelectorAll(".bg-option");
 const downloadTxtBtn = document.getElementById("downloadTxtBtn");
 const downloadPngBtn = document.getElementById("downloadPngBtn");
@@ -17,6 +19,8 @@ let lastAsciiText    = "";
 let lastAsciiMetrics = null;
 let currentTextColor = "#ffffff";
 let currentBgColor = "#000000";
+let colorMode = "static";
+let colorData = null; // Store color data for each character
 
 // Copy button (placeholder for now)
 copyButton.addEventListener("click", () => {
@@ -29,6 +33,23 @@ resolutionSlider.addEventListener("input", (e) => {
   const value = parseInt(e.target.value);
   const percentage = Math.round(((value - 50) / (1000 - 50)) * 100);
   resolutionValue.textContent = percentage + "%";
+});
+
+// Mode toggle
+modeOptions.forEach(btn => {
+  btn.addEventListener("click", () => {
+    modeOptions.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    colorMode = btn.dataset.mode;
+    
+    if (colorMode === "dynamic") {
+      textColorGroup.classList.add("hidden");
+    } else {
+      textColorGroup.classList.remove("hidden");
+    }
+    
+    updatePreviewColors();
+  });
 });
 
 // Sync color picker and hex input
@@ -60,9 +81,40 @@ bgOptions.forEach(btn => {
 
 function updatePreviewColors() {
   if (asciiOutput.textContent.trim()) {
-    asciiOutput.style.color = currentTextColor;
+    if (colorMode === "static") {
+      asciiOutput.style.color = currentTextColor;
+      // Remove any colored spans
+      asciiOutput.innerHTML = asciiOutput.textContent;
+    } else {
+      // Apply dynamic colors
+      applyDynamicColors();
+    }
     document.querySelector(".preview").style.background = currentBgColor;
   }
+}
+
+function applyDynamicColors() {
+  if (!colorData) return;
+  
+  const lines = asciiOutput.textContent.split('\n');
+  let html = '';
+  let colorIndex = 0;
+  
+  for (let y = 0; y < lines.length; y++) {
+    for (let x = 0; x < lines[y].length; x++) {
+      const char = lines[y][x];
+      const color = colorData[colorIndex];
+      if (color) {
+        html += `<span style="color:${color}">${char}</span>`;
+      } else {
+        html += char;
+      }
+      colorIndex++;
+    }
+    if (y < lines.length - 1) html += '\n';
+  }
+  
+  asciiOutput.innerHTML = html;
 }
 
 // Update file input label
@@ -102,11 +154,15 @@ function imageToAsciiFromImageElement(img, cols) {
 
   const data = tctx.getImageData(0, 0, cols, rows).data;
   let ascii = "";
+  const colors = [];
 
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
       const i = (y * cols + x) * 4;
       const r = data[i], g = data[i + 1], b = data[i + 2];
+      
+      // Store RGB color for dynamic mode
+      colors.push(`rgb(${r},${g},${b})`);
       
       const gray = 0.299 * r + 0.587 * g + 0.114 * b;
       const idx  = Math.floor((gray / 255) * (CHARSET.length - 1));
@@ -115,7 +171,7 @@ function imageToAsciiFromImageElement(img, cols) {
     ascii += "\n";
   }
 
-  return { ascii, cols, rows };
+  return { ascii, cols, rows, colors };
 }
 
 async function convertSelectedFile() {
