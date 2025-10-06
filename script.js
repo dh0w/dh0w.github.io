@@ -94,24 +94,23 @@ function updatePreviewColors() {
 }
 
 function applyDynamicColors() {
-  if (!colorData) return;
+  if (!colorData || !asciiOutput.textContent.trim()) return;
   
   const lines = asciiOutput.textContent.split('\n');
   let html = '';
   let colorIndex = 0;
   
-  for (let y = 0; y < lines.length; y++) {
-    for (let x = 0; x < lines[y].length; x++) {
-      const char = lines[y][x];
-      const color = colorData[colorIndex];
-      if (color) {
-        html += `<span style="color:${color}">${char}</span>`;
-      } else {
-        html += char;
-      }
+  for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
+    const line = lines[lineIdx];
+    for (let charIdx = 0; charIdx < line.length; charIdx++) {
+      const char = line[charIdx];
+      const color = colorData[colorIndex] || currentTextColor;
+      html += `<span style="color:${color}">${char}</span>`;
       colorIndex++;
     }
-    if (y < lines.length - 1) html += '\n';
+    if (lineIdx < lines.length - 1) {
+      html += '\n';
+    }
   }
   
   asciiOutput.innerHTML = html;
