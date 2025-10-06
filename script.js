@@ -5,6 +5,9 @@ const convertBtn     = document.getElementById("convertBtn");
 const asciiOutput    = document.getElementById("asciiOutput");
 const resolutionSlider = document.getElementById("resolutionSlider");
 const resolutionValue = document.getElementById("resolutionValue");
+const textColorPicker = document.getElementById("textColorPicker");
+const textColorHex = document.getElementById("textColorHex");
+const bgOptions = document.querySelectorAll(".bg-option");
 const downloadTxtBtn = document.getElementById("downloadTxtBtn");
 const downloadPngBtn = document.getElementById("downloadPngBtn");
 const asciiCanvas    = document.getElementById("asciiCanvas");
@@ -12,6 +15,8 @@ const copyButton     = document.getElementById("copyButton");
 
 let lastAsciiText    = "";
 let lastAsciiMetrics = null;
+let currentTextColor = "#ffffff";
+let currentBgColor = "#000000";
 
 // Copy button (placeholder for now)
 copyButton.addEventListener("click", () => {
@@ -25,6 +30,40 @@ resolutionSlider.addEventListener("input", (e) => {
   const percentage = Math.round(((value - 50) / (1000 - 50)) * 100);
   resolutionValue.textContent = percentage + "%";
 });
+
+// Sync color picker and hex input
+textColorPicker.addEventListener("input", (e) => {
+  currentTextColor = e.target.value;
+  textColorHex.value = currentTextColor;
+  updatePreviewColors();
+});
+
+textColorHex.addEventListener("input", (e) => {
+  let hex = e.target.value;
+  if (!hex.startsWith("#")) hex = "#" + hex;
+  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+    currentTextColor = hex;
+    textColorPicker.value = hex;
+    updatePreviewColors();
+  }
+});
+
+// Background color toggle
+bgOptions.forEach(btn => {
+  btn.addEventListener("click", () => {
+    bgOptions.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentBgColor = btn.dataset.color;
+    updatePreviewColors();
+  });
+});
+
+function updatePreviewColors() {
+  if (asciiOutput.textContent.trim()) {
+    asciiOutput.style.color = currentTextColor;
+    document.querySelector(".preview").style.background = currentBgColor;
+  }
+}
 
 // Update file input label
 fileInput.addEventListener("change", (e) => {
@@ -120,8 +159,12 @@ async function convertSelectedFile() {
     transform-origin: center center;
     transform: scale(${scale});
     display: inline-block;
+    color: ${currentTextColor};
   `;
   asciiOutput.textContent = trimmedAscii;
+  
+  // Update preview background
+  document.querySelector(".preview").style.background = currentBgColor;
 
   const lines = trimmedAscii.split("\n").filter(l => l);
   if (!lines.length) {
@@ -147,12 +190,12 @@ async function convertSelectedFile() {
 
   const ctx = asciiCanvas.getContext("2d");
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.fillStyle = "white";
+  ctx.fillStyle = currentBgColor;
   ctx.fillRect(0, 0, cssW, cssH);
 
   ctx.font = `${defaultFS}px ${fontFamily}`;
   ctx.textBaseline = "top";
-  ctx.fillStyle = "black";
+  ctx.fillStyle = currentTextColor;
 
   paddedLines.forEach((line, y) => {
     const yOff = y * defaultFS;

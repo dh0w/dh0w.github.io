@@ -45,6 +45,22 @@
       </div>
 
       <div class="control-group">
+        <label>Text Color</label>
+        <div class="color-input-container">
+          <input type="color" id="textColorPicker" value="#ffffff" />
+          <input type="text" id="textColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff" />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Background Color</label>
+        <div class="background-toggle">
+          <button type="button" class="bg-option active" data-color="#000000">Black</button>
+          <button type="button" class="bg-option" data-color="#ffffff">White</button>
+        </div>
+      </div>
+
+      <div class="control-group">
         <div class="button-group">
           <button id="convertBtn">Convert to ASCII</button>
           <button id="downloadTxtBtn" disabled>Download TXT</button>
