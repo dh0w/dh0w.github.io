@@ -20,7 +20,7 @@ let lastAsciiMetrics = null;
 let currentTextColor = "#ffffff";
 let currentBgColor = "#000000";
 let colorMode = "static";
-let colorData = null; // Store color data for each character
+let colorMap = null; // Store 2D color array
 
 // Copy button (placeholder for now)
 copyButton.addEventListener("click", () => {
@@ -80,12 +80,14 @@ bgOptions.forEach(btn => {
 });
 
 function updatePreviewColors() {
-  if (asciiOutput.textContent.trim()) {
+  if (asciiOutput.textContent.trim() || asciiOutput.innerHTML.trim()) {
     if (colorMode === "static") {
       asciiOutput.style.color = currentTextColor;
       // Remove any colored spans
-      asciiOutput.innerHTML = asciiOutput.textContent;
-    } else {
+      if (asciiOutput.innerHTML.includes('<span')) {
+        asciiOutput.textContent = lastAsciiText;
+      }
+    } else if (colorMode === "dynamic" && colorMap) {
       // Apply dynamic colors
       applyDynamicColors();
     }
@@ -94,21 +96,19 @@ function updatePreviewColors() {
 }
 
 function applyDynamicColors() {
-  if (!colorData || !asciiOutput.textContent.trim()) return;
+  if (!colorMap || !lastAsciiText) return;
   
-  const lines = asciiOutput.textContent.split('\n');
+  const lines = lastAsciiText.split('\n');
   let html = '';
-  let colorIndex = 0;
   
-  for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
-    const line = lines[lineIdx];
-    for (let charIdx = 0; charIdx < line.length; charIdx++) {
-      const char = line[charIdx];
-      const color = colorData[colorIndex] || currentTextColor;
+  for (let y = 0; y < lines.length; y++) {
+    const line = lines[y];
+    for (let x = 0; x < line.length; x++) {
+      const char = line[x];
+      const color = colorMap[y] && colorMap[y][x] ? colorMap[y][x] : currentTextColor;
       html += `<span style="color:${color}">${char}</span>`;
-      colorIndex++;
     }
-    if (lineIdx < lines.length - 1) {
+    if (y < lines.length - 1) {
       html += '\n';
     }
   }
@@ -153,24 +153,26 @@ function imageToAsciiFromImageElement(img, cols) {
 
   const data = tctx.getImageData(0, 0, cols, rows).data;
   let ascii = "";
-  const colors = [];
+  const colorMap = []; // Store colors in a 2D array matching ASCII structure
 
   for (let y = 0; y < rows; y++) {
+    const rowColors = [];
     for (let x = 0; x < cols; x++) {
       const i = (y * cols + x) * 4;
       const r = data[i], g = data[i + 1], b = data[i + 2];
       
-      // Store RGB color for dynamic mode
-      colors.push(`rgb(${r},${g},${b})`);
+      // Store RGB color for this position
+      rowColors.push(`rgb(${r},${g},${b})`);
       
       const gray = 0.299 * r + 0.587 * g + 0.114 * b;
       const idx  = Math.floor((gray / 255) * (CHARSET.length - 1));
       ascii += CHARSET[CHARSET.length - 1 - idx];
     }
+    colorMap.push(rowColors);
     ascii += "\n";
   }
 
-  return { ascii, cols, rows, colors };
+  return { ascii, cols, rows, colorMap };
 }
 
 async function convertSelectedFile() {
