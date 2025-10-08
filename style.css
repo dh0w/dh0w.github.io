@@ -81,22 +81,8 @@ body {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 1.445rem;
+  padding: 1.445rem 1.445rem 2.1675rem 1.445rem;
   flex: 1;
-  display: flex;
-  gap: 1.445rem;
-  align-items: flex-start;
-}
-
-.controls-section {
-  width: 420px;
-  flex-shrink: 0;
-}
-
-.preview-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 h1 {
@@ -115,13 +101,26 @@ h1 {
   font-weight: 300;
 }
 
+.main-layout {
+  display: flex;
+  gap: 1.445rem;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+/* Controls fixed-ish size */
 .controls {
   background: #252525;
-  padding: 1.2rem;
+  padding: 1.445rem;
   border-radius: 8.67px;
   box-shadow: 0 0 20px rgba(255, 200, 100, 0.15), 0 2px 8px rgba(0,0,0,0.3);
+  margin-bottom: 0;
   border: 1px solid rgba(255, 200, 100, 0.2);
   transition: box-shadow 0.3s ease;
+  width: 480px;
+  height: 540px;
+  overflow-y: auto;
 }
 
 .controls:hover {
@@ -129,7 +128,7 @@ h1 {
 }
 
 .control-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.08375rem;
 }
 
 .control-group:last-child {
@@ -138,19 +137,20 @@ h1 {
 
 label {
   display: block;
-  font-size: 0.6rem;
+  font-size: 0.614125rem;
   font-weight: 500;
   color: #999;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.36125rem;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.36125px;
 }
 
 /* Color controls - compact layout */
 .color-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.7225rem;
+  align-items: start;
 }
 
 .color-mode-group,
@@ -163,25 +163,25 @@ label {
 .color-mode-group label,
 .text-color-group label,
 .bg-color-group label {
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.36125rem;
 }
 
 /* Mode toggle */
 .mode-toggle {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.36125rem;
 }
 
 .mode-option {
   flex: 1;
-  padding: 0.55rem;
+  padding: 0.6rem;
   background: #2f2f2f;
   color: #aaa;
   border: 2px solid #444;
   border-radius: 5.78px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.62rem;
+  font-size: 0.65rem;
   min-width: auto;
   white-space: nowrap;
 }
@@ -205,8 +205,8 @@ label {
 }
 
 input[type="color"] {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border: 1px solid #444;
   border-radius: 5.78px;
   background: #2f2f2f;
@@ -233,10 +233,10 @@ input[type="text"]#textColorHex {
   background: #2f2f2f;
   border: 1px solid #444;
   border-radius: 5.78px;
-  padding: 0.55rem;
+  padding: 0.6rem;
   color: #aaa;
   font-family: monospace;
-  font-size: 0.62rem;
+  font-size: 0.65rem;
   transition: all 0.2s ease;
 }
 
@@ -254,14 +254,14 @@ input[type="text"]#textColorHex:focus {
 
 .bg-option {
   flex: 1;
-  padding: 0.55rem;
+  padding: 0.6rem;
   background: #2f2f2f;
   color: #aaa;
   border: 2px solid #444;
   border-radius: 5.78px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.62rem;
+  font-size: 0.65rem;
   min-width: auto;
 }
 
@@ -297,7 +297,7 @@ input[type="text"]#textColorHex:focus {
 
 .file-input-label {
   display: block;
-  padding: 0.65rem;
+  padding: 0.7225rem;
   background: #2f2f2f;
   border: 2px dashed #444;
   border-radius: 5.78px;
@@ -306,7 +306,6 @@ input[type="text"]#textColorHex:focus {
   transition: all 0.3s ease;
   color: #999;
   font-weight: 500;
-  font-size: 0.62rem;
 }
 
 .file-input-label:hover {
@@ -377,25 +376,25 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 
 .slider-value {
-  min-width: 34px;
+  min-width: 36.125px;
   text-align: right;
   font-weight: 600;
   color: #aaa;
-  font-size: 0.7rem;
+  font-size: 0.7225rem;
 }
 
 /* Buttons */
 .button-group {
   display: flex;
-  gap: 0.6rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
 button {
   flex: 1;
-  min-width: 90px;
-  padding: 0.58rem 0.9rem;
-  font-size: 0.62rem;
+  min-width: 108.375px;
+  padding: 0.6321875rem 1.08375rem;
+  font-size: 0.7225rem;
   font-weight: 500;
   border: none;
   border-radius: 5.78px;
@@ -434,28 +433,31 @@ button:disabled {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Preview */
+/* Preview section fixed size */
 .preview-section {
-  margin-top: 2rem;
+  width: 540px;
+  height: 540px;
+  display: flex;
+  flex-direction: column;
 }
 
 .preview-label {
-  font-size: 0.6rem;
+  font-size: 0.614125rem;
   font-weight: 500;
   color: #999;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.7225rem;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.36125px;
 }
 
 .preview {
   width: 100%;
-  height: 480px;
+  height: 100%;
   background: #252525;
   border: 1px solid #333;
   border-radius: 8.67px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  padding: 1.2rem;
+  padding: 1.445rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -487,10 +489,10 @@ pre#asciiOutput:empty::after {
   content: 'Your ASCII art will appear here';
   color: #555;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.7225rem;
   white-space: normal;
   display: block;
-  padding: 1.2rem;
+  padding: 1.445rem;
 }
 
 /* Footer */
@@ -507,40 +509,25 @@ canvas {
   display: none;
 }
 
-@media (max-width: 1024px) {
-  .container {
+@media (max-width: 1100px) {
+  .main-layout {
     flex-direction: column;
+    align-items: stretch;
   }
 
-  .controls-section {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
+  .controls,
   .preview-section {
     width: 100%;
+    height: auto;
+  }
+
+  .preview {
+    height: 43.35vh;
   }
 }
 
-@media (max-width: 768px) {
-  .header h1 {
-    font-size: 1.1rem;
-  }
-
-  h1 {
-    font-size: 1.5rem;
-  }
-
-  .color-controls {
-    flex-direction: column;
-  }
-
-  .button-group {
-    flex-direction: column;
-  }
-
-  button {
-    width: 100%;
+@media (max-width: 480px) {
+  .controls {
+    padding: 1rem;
   }
 }
