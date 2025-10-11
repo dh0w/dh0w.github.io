@@ -248,8 +248,8 @@ async function convertSelectedFile() {
   // Get the preview container's actual dimensions (accounting for padding)
   const previewContainer = document.querySelector('.preview');
   const containerRect = previewContainer.getBoundingClientRect();
-  const availableWidth = containerRect.width - 32; // subtract padding
-  const availableHeight = containerRect.height - 32;
+  const availableWidth = containerRect.width - 40; // subtract padding
+  const availableHeight = containerRect.height - 40;
 
   const scale = Math.min(availableWidth / asciiW, availableHeight / asciiH, 1);
 
@@ -261,6 +261,8 @@ async function convertSelectedFile() {
     transform-origin: center center;
     transform: scale(${scale});
     display: inline-block;
+    max-width: 100%;
+    max-height: 100%;
   `;
   // Set content according to mode
   if (colorMode === "dynamic" && colorMap) {
