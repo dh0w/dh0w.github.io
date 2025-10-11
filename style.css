@@ -100,11 +100,13 @@ body {
   box-shadow: 0 0 20px rgba(255, 200, 100, 0.15), 0 2px 8px rgba(0,0,0,0.3);
   transition: box-shadow 0.3s ease;
   overflow: hidden;
+  width: 550px;
   height: 550px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.445rem;
+  flex-shrink: 0;
 }
 
 .preview-container:hover {
