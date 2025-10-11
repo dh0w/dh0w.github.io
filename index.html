@@ -21,70 +21,69 @@
   </header>
 
   <div class="container">
-    <p class="subtitle">Transform your images into beautiful ASCII art</p>
+    <div class="controls-section">
+      <p class="subtitle">Transform your images into beautiful ASCII art</p>
 
-    <div class="main-layout">
       <div class="controls">
-        <div class="control-group">
-          <label>Upload Image</label>
-          <div class="file-input-wrapper">
-            <input type="file" id="fileInput" accept="image/*" />
-            <label for="fileInput" class="file-input-label" id="fileLabel">
-              Choose an image file
-            </label>
+      <div class="control-group">
+        <label>Upload Image</label>
+        <div class="file-input-wrapper">
+          <input type="file" id="fileInput" accept="image/*" />
+          <label for="fileInput" class="file-input-label" id="fileLabel">
+            Choose an image file
+          </label>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Resolution</label>
+        <div class="slider-container">
+          <div class="slider-wrapper">
+            <input type="range" id="resolutionSlider" min="50" max="1000" value="250" />
+          </div>
+          <span class="slider-value" id="resolutionValue">50%</span>
+        </div>
+      </div>
+
+      <div class="control-group color-controls">
+        <div class="color-mode-group">
+          <label>Color Mode</label>
+          <div class="mode-toggle">
+            <button type="button" class="mode-option active" data-mode="static">Static</button>
+            <button type="button" class="mode-option" data-mode="dynamic">Dynamic RGB</button>
           </div>
         </div>
 
-        <div class="control-group">
-          <label>Resolution</label>
-          <div class="slider-container">
-            <div class="slider-wrapper">
-              <input type="range" id="resolutionSlider" min="50" max="1000" value="250" />
-            </div>
-            <span class="slider-value" id="resolutionValue">50%</span>
+        <div class="text-color-group" id="textColorGroup">
+          <label>Text Color</label>
+          <div class="color-input-container">
+            <input type="color" id="textColorPicker" value="#ffffff" />
+            <input type="text" id="textColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff" />
           </div>
         </div>
 
-        <div class="control-group color-controls">
-          <div class="color-mode-group">
-            <label>Color Mode</label>
-            <div class="mode-toggle">
-              <button type="button" class="mode-option active" data-mode="static">Static</button>
-              <button type="button" class="mode-option" data-mode="dynamic">Dynamic RGB</button>
-            </div>
-          </div>
-
-          <div class="text-color-group" id="textColorGroup">
-            <label>Text Color</label>
-            <div class="color-input-container">
-              <input type="color" id="textColorPicker" value="#ffffff" />
-              <input type="text" id="textColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff" />
-            </div>
-          </div>
-
-          <div class="bg-color-group">
-            <label>Background</label>
-            <div class="background-toggle">
-              <button type="button" class="bg-option active" data-color="#000000">Black</button>
-              <button type="button" class="bg-option" data-color="#ffffff">White</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="button-group">
-            <button id="convertBtn">Convert to ASCII</button>
-            <button id="downloadTxtBtn" disabled>Download TXT</button>
-            <button id="downloadPngBtn" disabled>Download PNG</button>
+        <div class="bg-color-group">
+          <label>Background</label>
+          <div class="background-toggle">
+            <button type="button" class="bg-option active" data-color="#000000">Black</button>
+            <button type="button" class="bg-option" data-color="#ffffff">White</button>
           </div>
         </div>
       </div>
 
-      <div class="preview-section">
-        <div class="preview-label">Preview</div>
-        <div class="preview">
-          <pre id="asciiOutput"></pre>
+      <div class="control-group">
+        <div class="button-group">
+          <button id="convertBtn">Convert to ASCII</button>
+          <button id="downloadTxtBtn" disabled>Download TXT</button>
+          <button id="downloadPngBtn" disabled>Download PNG</button>
         </div>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-label">Preview</div>
+      <div class="preview">
+        <pre id="asciiOutput"></pre>
       </div>
     </div>
 
