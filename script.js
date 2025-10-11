@@ -295,8 +295,9 @@ async function convertSelectedFile() {
 
   asciiCanvas.width  = Math.round(cssW * dpr);
   asciiCanvas.height = Math.round(cssH * dpr);
-  asciiCanvas.style.width  = `${cssW}px`;
-  asciiCanvas.style.height = `${cssH}px`;
+  // Let CSS handle the display dimensions for proper scaling
+  asciiCanvas.style.removeProperty('width');
+  asciiCanvas.style.removeProperty('height');
 
   const ctx = asciiCanvas.getContext("2d");
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
