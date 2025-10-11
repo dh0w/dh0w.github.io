@@ -30,7 +30,7 @@ body {
   margin: 0 auto;
   padding: 0 1.445rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
@@ -39,42 +39,7 @@ body {
   font-weight: 600;
   margin: 0;
   color: #f5f5f5;
-  text-align: left;
-}
-
-.copy-button {
-  display: flex;
-  align-items: center;
-  gap: 0.36125rem;
-  background: #2a2a2a;
-  border: 1px solid #444;
-  border-radius: 4.335px;
-  padding: 0.36125rem 0.541875rem;
-  color: #aaa;
-  font-size: 0.65025rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: monospace;
-  max-width: 108.375px;
-  overflow: hidden;
-}
-
-.copy-button:hover {
-  background: #333;
-  border-color: #555;
-}
-
-.copy-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  flex: 1;
-  min-width: 0;
-}
-
-.copy-icon {
-  flex-shrink: 0;
-  opacity: 0.7;
+  text-align: center;
 }
 
 .container {
@@ -83,6 +48,9 @@ body {
   margin: 0 auto;
   padding: 1.445rem 1.445rem 2.1675rem 1.445rem;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .subtitle {
@@ -93,11 +61,13 @@ body {
   font-weight: 300;
 }
 
-/* Main layout - side by side */
+/* Main layout - side by side, centered */
 .main-content {
   display: flex;
   gap: 1.445rem;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
 }
 
 .controls {
@@ -108,8 +78,10 @@ body {
   border: 1px solid rgba(255, 200, 100, 0.2);
   transition: box-shadow 0.3s ease;
   width: 420px;
-  min-height: 480px;
+  height: 550px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .controls:hover {
@@ -117,22 +89,26 @@ body {
 }
 
 .preview-section {
-  flex: 1;
-  min-width: 0;
+  flex-shrink: 0;
 }
 
 .preview {
-  width: 480px;
-  height: 480px;
+  width: 550px;
+  height: 550px;
   background: #252525;
-  border: 1px solid #333;
+  border: 1px solid rgba(255, 200, 100, 0.2);
   border-radius: 8.67px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 0 20px rgba(255, 200, 100, 0.15), 0 2px 8px rgba(0,0,0,0.3);
   padding: 1.445rem;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.preview:hover {
+  box-shadow: 0 0 30px rgba(255, 200, 100, 0.25), 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .control-group {
@@ -141,6 +117,7 @@ body {
 
 .control-group:last-child {
   margin-bottom: 0;
+  margin-top: auto;
 }
 
 label {
@@ -392,14 +369,7 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 
 /* Buttons */
-.button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-}
-
 button {
-  width: 100%;
   padding: 0.6321875rem 1.08375rem;
   font-size: 0.7225rem;
   font-weight: 500;
@@ -416,8 +386,10 @@ button:disabled {
 }
 
 #convertBtn {
+  width: 100%;
   background: #555;
   color: #fff;
+  margin-bottom: 0.7rem;
 }
 
 #convertBtn:hover:not(:disabled) {
@@ -426,18 +398,35 @@ button:disabled {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-#downloadTxtBtn, #downloadPngBtn {
+/* Action buttons container */
+.action-buttons {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+}
+
+.icon-button {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #2f2f2f;
   color: #aaa;
   border: 2px solid #444;
+  border-radius: 5.78px;
 }
 
-#downloadTxtBtn:hover:not(:disabled), 
-#downloadPngBtn:hover:not(:disabled) {
+.icon-button:hover:not(:disabled) {
   border-color: #555;
   background: #333;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.icon-button svg {
+  flex-shrink: 0;
 }
 
 .preview-wrapper {
@@ -485,20 +474,20 @@ canvas {
   display: none;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
   .main-content {
     flex-direction: column;
   }
 
   .controls {
     width: 100%;
-    min-height: auto;
+    max-width: 550px;
+    height: auto;
   }
 
   .preview {
     width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
+    max-width: 550px;
   }
 
   .color-controls {
@@ -509,6 +498,11 @@ canvas {
 @media (max-width: 768px) {
   .header h1 {
     font-size: 1.1rem;
+  }
+
+  .controls,
+  .preview {
+    max-width: 100%;
   }
 
   .preview {

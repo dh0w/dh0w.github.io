@@ -10,10 +10,9 @@ const textColorHex = document.getElementById("textColorHex");
 const textColorGroup = document.getElementById("textColorGroup");
 const modeOptions = document.querySelectorAll(".mode-option");
 const bgOptions = document.querySelectorAll(".bg-option");
-const downloadTxtBtn = document.getElementById("downloadTxtBtn");
+const copyBtn = document.getElementById("copyBtn");
 const downloadPngBtn = document.getElementById("downloadPngBtn");
 const asciiCanvas    = document.getElementById("asciiCanvas");
-const copyButton     = document.getElementById("copyButton");
 
 let lastAsciiText    = "";
 let lastAsciiMetrics = null;
@@ -22,9 +21,23 @@ let currentBgColor = "#000000";
 let colorMode = "static";
 let colorMap = null; // Store 2D color array (global)
 
-// Copy button placeholder
-copyButton.addEventListener("click", () => {
-  alert("Coming soon!");
+// Copy button functionality
+copyBtn.addEventListener("click", async () => {
+  if (!lastAsciiText) return;
+  
+  try {
+    await navigator.clipboard.writeText(lastAsciiText);
+    // Visual feedback
+    const originalHTML = copyBtn.innerHTML;
+    copyBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>`;
+    setTimeout(() => {
+      copyBtn.innerHTML = originalHTML;
+    }, 1500);
+  } catch (err) {
+    alert("Failed to copy text: " + err.message);
+  }
 });
 
 // Update slider value display
@@ -220,7 +233,7 @@ async function convertSelectedFile() {
   const trimmedAscii = ascii.replace(/ +$/gm, "");
   lastAsciiText = trimmedAscii;
   colorMap = returnedColorMap; // store globally for dynamic mode
-  downloadTxtBtn.disabled = false;
+  copyBtn.disabled = false;
   downloadPngBtn.disabled = false;
 
   const defaultFS = 10;
@@ -312,15 +325,6 @@ async function convertSelectedFile() {
 convertBtn.addEventListener("click", () =>
   convertSelectedFile().catch(e => alert("Conversion error: " + e.message))
 );
-
-downloadTxtBtn.addEventListener("click", () => {
-  if (!lastAsciiText) return;
-  const blob = new Blob([lastAsciiText], { type: "text/plain" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "ascii.txt";
-  a.click();
-});
 
 downloadPngBtn.addEventListener("click", () => {
   if (!lastAsciiMetrics) return;
