@@ -12,6 +12,8 @@ const modeOptions = document.querySelectorAll(".mode-option");
 const bgOptions = document.querySelectorAll(".bg-option");
 const copyBtn = document.getElementById("copyBtn");
 const downloadPngBtn = document.getElementById("downloadPngBtn");
+const previewCopyBtn = document.getElementById("previewCopyBtn");
+const previewDownloadBtn = document.getElementById("previewDownloadBtn");
 const asciiCanvas    = document.getElementById("asciiCanvas");
 
 let lastAsciiText    = "";
@@ -21,24 +23,31 @@ let currentBgColor = "#000000";
 let colorMode = "static";
 let colorMap = null; // Store 2D color array (global)
 
-// Copy button functionality
-copyBtn.addEventListener("click", async () => {
+// Copy button functionality (both buttons)
+async function copyAsciiText() {
   if (!lastAsciiText) return;
   
   try {
     await navigator.clipboard.writeText(lastAsciiText);
-    // Visual feedback
+    // Visual feedback for both buttons
     const originalHTML = copyBtn.innerHTML;
-    copyBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    const checkSVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>`;
+    copyBtn.innerHTML = checkSVG;
+    previewCopyBtn.textContent = "✓ Copied";
+    
     setTimeout(() => {
       copyBtn.innerHTML = originalHTML;
+      previewCopyBtn.textContent = "Copy";
     }, 1500);
   } catch (err) {
     alert("Failed to copy text: " + err.message);
   }
-});
+}
+
+copyBtn.addEventListener("click", copyAsciiText);
+previewCopyBtn.addEventListener("click", copyAsciiText);
 
 // Update slider value display
 resolutionSlider.addEventListener("input", (e) => {
@@ -235,6 +244,8 @@ async function convertSelectedFile() {
   colorMap = returnedColorMap; // store globally for dynamic mode
   copyBtn.disabled = false;
   downloadPngBtn.disabled = false;
+  previewCopyBtn.disabled = false;
+  previewDownloadBtn.disabled = false;
 
   const defaultFS = 10;
   const glyphW = measureGlyphWidth(fontFamily, defaultFS);
@@ -326,14 +337,17 @@ convertBtn.addEventListener("click", () =>
   convertSelectedFile().catch(e => alert("Conversion error: " + e.message))
 );
 
-downloadPngBtn.addEventListener("click", () => {
+function downloadPNG() {
   if (!lastAsciiMetrics) return;
   const url = asciiCanvas.toDataURL("image/png");
   const a = document.createElement("a");
   a.href = url;
   a.download = "ascii.png";
   a.click();
-});
+}
+
+downloadPngBtn.addEventListener("click", downloadPNG);
+previewDownloadBtn.addEventListener("click", downloadPNG);
 
 // initialize empty output
 asciiOutput.textContent = "";

@@ -14,7 +14,7 @@
   </header>
 
   <div class="container">
-    <p class="subtitle">Transform your images into beautiful ASCII art</p>
+    <p class="subtitle">It's time. Create the cult of tomorrow now.</p>
 
     <div class="main-content">
       <div class="controls">
@@ -65,8 +65,8 @@
         </div>
 
         <div class="control-group">
-          <button id="convertBtn">Convert to ASCII</button>
-          <div class="action-buttons">
+          <div class="button-row">
+            <button id="convertBtn">Convert to ASCII</button>
             <button id="copyBtn" class="icon-button" title="Copy ASCII text" disabled>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -85,8 +85,26 @@
       </div>
 
       <div class="preview-section">
-        <div class="preview">
-          <pre id="asciiOutput"></pre>
+        <div class="preview-container">
+          <div class="preview-header">
+            <span class="preview-label">PREVIEW</span>
+            <div class="preview-actions">
+              <button class="preview-action-btn" id="previewCopyBtn" title="Copy" disabled>
+                Copy
+              </button>
+              <button class="preview-action-btn" id="previewDownloadBtn" title="Download PNG" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                PNG
+              </button>
+            </div>
+          </div>
+          <div class="preview">
+            <pre id="asciiOutput"></pre>
+          </div>
         </div>
       </div>
     </div>
