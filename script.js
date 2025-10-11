@@ -12,8 +12,6 @@ const modeOptions = document.querySelectorAll(".mode-option");
 const bgOptions = document.querySelectorAll(".bg-option");
 const copyBtn = document.getElementById("copyBtn");
 const downloadPngBtn = document.getElementById("downloadPngBtn");
-const previewCopyBtn = document.getElementById("previewCopyBtn");
-const previewDownloadBtn = document.getElementById("previewDownloadBtn");
 const asciiCanvas    = document.getElementById("asciiCanvas");
 
 let lastAsciiText    = "";
@@ -23,23 +21,21 @@ let currentBgColor = "#000000";
 let colorMode = "static";
 let colorMap = null; // Store 2D color array (global)
 
-// Copy button functionality (both buttons)
+// Copy button functionality
 async function copyAsciiText() {
   if (!lastAsciiText) return;
   
   try {
     await navigator.clipboard.writeText(lastAsciiText);
-    // Visual feedback for both buttons
+    // Visual feedback
     const originalHTML = copyBtn.innerHTML;
     const checkSVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>`;
     copyBtn.innerHTML = checkSVG;
-    previewCopyBtn.textContent = "✓ Copied";
     
     setTimeout(() => {
       copyBtn.innerHTML = originalHTML;
-      previewCopyBtn.textContent = "Copy";
     }, 1500);
   } catch (err) {
     alert("Failed to copy text: " + err.message);
@@ -47,12 +43,11 @@ async function copyAsciiText() {
 }
 
 copyBtn.addEventListener("click", copyAsciiText);
-previewCopyBtn.addEventListener("click", copyAsciiText);
 
-// Update slider value display
+// Update slider value display (adjusted for new range)
 resolutionSlider.addEventListener("input", (e) => {
   const value = parseInt(e.target.value);
-  const percentage = Math.round(((value - 50) / (1000 - 50)) * 100);
+  const percentage = Math.round(((value - 50) / (430 - 50)) * 100);
   resolutionValue.textContent = percentage + "%";
 });
 
@@ -244,8 +239,6 @@ async function convertSelectedFile() {
   colorMap = returnedColorMap; // store globally for dynamic mode
   copyBtn.disabled = false;
   downloadPngBtn.disabled = false;
-  previewCopyBtn.disabled = false;
-  previewDownloadBtn.disabled = false;
 
   const defaultFS = 10;
   const glyphW = measureGlyphWidth(fontFamily, defaultFS);
@@ -347,7 +340,6 @@ function downloadPNG() {
 }
 
 downloadPngBtn.addEventListener("click", downloadPNG);
-previewDownloadBtn.addEventListener("click", downloadPNG);
 
 // initialize empty output
 asciiOutput.textContent = "";
