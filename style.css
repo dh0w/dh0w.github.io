@@ -26,7 +26,7 @@ body {
 }
 
 .header-content {
-  max-width: 1200px;
+  max-width: 867px;
   margin: 0 auto;
   padding: 0 1.445rem;
   display: flex;
@@ -55,7 +55,7 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: monospace;
-  max-width: 140px;
+  max-width: 108.375px;
   overflow: hidden;
 }
 
@@ -101,21 +101,20 @@ h1 {
   font-weight: 300;
 }
 
-/* Layout */
 .main-layout {
   display: flex;
   gap: 1.445rem;
   justify-content: center;
   align-items: flex-start;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
-/* Controls fixed-ish size with stronger glow */
+/* Controls fixed-ish size */
 .controls {
   background: #252525;
   padding: 1.445rem;
   border-radius: 8.67px;
-  box-shadow: 0 0 30px rgba(255, 200, 100, 0.225), 0 8px 30px rgba(0,0,0,0.45);
+  box-shadow: 0 0 20px rgba(255, 200, 100, 0.15), 0 2px 8px rgba(0,0,0,0.3);
   margin-bottom: 0;
   border: 1px solid rgba(255, 200, 100, 0.2);
   transition: box-shadow 0.3s ease;
@@ -124,44 +123,18 @@ h1 {
   overflow-y: auto;
 }
 
-/* increase glow under inputs box by 50% relative previously used */
 .controls:hover {
-  box-shadow: 0 0 45px rgba(255, 200, 100, 0.35), 0 10px 36px rgba(0,0,0,0.45);
+  box-shadow: 0 0 30px rgba(255, 200, 100, 0.25), 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .control-group {
   margin-bottom: 1.08375rem;
 }
 
-.mode-switch-group label {
-  margin-bottom: 0.5rem;
+.control-group:last-child {
+  margin-bottom: 0;
 }
 
-/* Mode switch */
-.mode-switch {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.mode-switch-option {
-  flex: 1;
-  padding: 0.6rem;
-  background: #2f2f2f;
-  color: #aaa;
-  border: 2px solid #444;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  font-size: 0.85rem;
-}
-
-.mode-switch-option.active {
-  background: rgba(255, 200, 100, 0.1);
-  border-color: rgba(255, 200, 100, 0.6);
-  color: #ffc868;
-}
-
-/* Labels */
 label {
   display: block;
   font-size: 0.614125rem;
@@ -182,12 +155,18 @@ label {
 
 .color-mode-group,
 .text-color-group,
-.bg-color-group,
-.resolution-helper {
+.bg-color-group {
   display: flex;
   flex-direction: column;
 }
 
+.color-mode-group label,
+.text-color-group label,
+.bg-color-group label {
+  margin-bottom: 0.36125rem;
+}
+
+/* Mode toggle */
 .mode-toggle {
   display: flex;
   gap: 0.36125rem;
@@ -207,12 +186,18 @@ label {
   white-space: nowrap;
 }
 
+.mode-option:hover {
+  border-color: #555;
+  background: #333;
+}
+
 .mode-option.active {
   border-color: rgba(255, 200, 100, 0.6);
   background: rgba(255, 200, 100, 0.1);
   color: #ffc868;
 }
 
+/* Color inputs */
 .color-input-container {
   display: flex;
   gap: 0.5rem;
@@ -227,10 +212,23 @@ input[type="color"] {
   background: #2f2f2f;
   cursor: pointer;
   padding: 0;
+  transition: all 0.2s ease;
 }
 
-input[type="text"]#textColorHex,
-input[type="text"]#textColorHexText {
+input[type="color"]:hover {
+  border-color: #555;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 3px;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 3px;
+}
+
+input[type="text"]#textColorHex {
   flex: 1;
   background: #2f2f2f;
   border: 1px solid #444;
@@ -239,57 +237,169 @@ input[type="text"]#textColorHexText {
   color: #aaa;
   font-family: monospace;
   font-size: 0.65rem;
+  transition: all 0.2s ease;
 }
 
-.background-toggle, .background-toggle .bg-option, .bg-option-text {
+input[type="text"]#textColorHex:focus {
+  outline: none;
+  border-color: #555;
+  background: #333;
+}
+
+/* Background toggle */
+.background-toggle {
   display: flex;
   gap: 0.5rem;
 }
 
-.bg-option, .bg-option-text {
+.bg-option {
   flex: 1;
-  padding: 0.45rem;
+  padding: 0.6rem;
   background: #2f2f2f;
   color: #aaa;
   border: 2px solid #444;
   border-radius: 5.78px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
+  min-width: auto;
 }
 
-.bg-option.active, .bg-option-text.active {
+.bg-option:hover {
+  border-color: #555;
+  background: #333;
+}
+
+.bg-option.active {
   border-color: #5a9f6f;
   background: #2a3d2f;
   color: #90d4a8;
 }
 
-/* Input text for Text mode */
-#textInput {
+/* Hide text color controls in dynamic mode */
+.text-color-group.hidden {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Custom file input */
+.file-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
   width: 100%;
-  padding: 0.6rem;
-  border-radius: 6px;
-  border: 1px solid #444;
+}
+
+.file-input-wrapper input[type=file] {
+  position: absolute;
+  left: -9999px;
+}
+
+.file-input-label {
+  display: block;
+  padding: 0.7225rem;
   background: #2f2f2f;
-  color: #eee;
-  font-size: 0.95rem;
+  border: 2px dashed #444;
+  border-radius: 5.78px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #999;
+  font-weight: 500;
+}
+
+.file-input-label:hover {
+  border-color: #555;
+  background: #333;
+}
+
+.file-input-label.has-file {
+  border-color: #5a9f6f;
+  background: #2a3d2f;
+  color: #90d4a8;
+}
+
+/* Slider */
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.slider-wrapper {
+  flex: 1;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #333;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+input[type="range"]:hover {
+  background: #3a3a3a;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #aaa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #ccc;
+  transform: scale(1.1);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #aaa;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  background: #ccc;
+  transform: scale(1.1);
+}
+
+.slider-value {
+  min-width: 36.125px;
+  text-align: right;
+  font-weight: 600;
+  color: #aaa;
+  font-size: 0.7225rem;
 }
 
 /* Buttons */
 .button-group {
   display: flex;
   gap: 1rem;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 button {
+  flex: 1;
+  min-width: 108.375px;
   padding: 0.6321875rem 1.08375rem;
   font-size: 0.7225rem;
   font-weight: 500;
   border: none;
   border-radius: 5.78px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
   font-family: inherit;
 }
 
@@ -298,22 +408,29 @@ button:disabled {
   cursor: not-allowed;
 }
 
-#convertBtn, #convertTextBtn {
+#convertBtn {
   background: #555;
   color: #fff;
 }
 
-#convertBtn:hover:not(:disabled),
-#convertTextBtn:hover:not(:disabled) {
+#convertBtn:hover:not(:disabled) {
   background: #666;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-#downloadPngBtn, #downloadTextPngBtn {
+#downloadTxtBtn, #downloadPngBtn {
   background: #2f2f2f;
   color: #aaa;
   border: 2px solid #444;
+}
+
+#downloadTxtBtn:hover:not(:disabled), 
+#downloadPngBtn:hover:not(:disabled) {
+  border-color: #555;
+  background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Preview section fixed size */
@@ -339,12 +456,20 @@ button:disabled {
   background: #252525;
   border: 1px solid #333;
   border-radius: 8.67px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   padding: 1.445rem;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+}
+
+.preview-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 pre#asciiOutput {
@@ -370,7 +495,16 @@ pre#asciiOutput:empty::after {
   padding: 1.445rem;
 }
 
-/* Visual tweaks */
+/* Footer */
+.footer {
+  background: #1a1a1a;
+  padding: 1.08375rem 1.445rem;
+  text-align: center;
+  color: #888;
+  font-size: 0.686375rem;
+  border-top: 1px solid #333;
+}
+
 canvas {
   display: none;
 }
@@ -389,5 +523,11 @@ canvas {
 
   .preview {
     height: 43.35vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .controls {
+    padding: 1rem;
   }
 }
