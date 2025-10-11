@@ -231,8 +231,8 @@ async function convertSelectedFile() {
   // Get the preview container's actual dimensions (accounting for padding)
   const previewContainer = document.querySelector('.preview');
   const containerRect = previewContainer.getBoundingClientRect();
-  const availableWidth = containerRect.width - 64; // subtract padding
-  const availableHeight = containerRect.height - 64;
+  const availableWidth = containerRect.width - 32; // subtract padding
+  const availableHeight = containerRect.height - 32;
 
   const scale = Math.min(availableWidth / asciiW, availableHeight / asciiH, 1);
 
