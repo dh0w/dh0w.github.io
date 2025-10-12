@@ -47,19 +47,22 @@
             </div>
           </div>
 
-          <div class="text-color-group" id="textColorGroup">
-            <label>Text Color</label>
-            <div class="color-input-container">
-              <input type="color" id="textColorPicker" value="#ffffff" />
-              <input type="text" id="textColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff" />
+          <!-- New combined row: Background (left) and Text color (right) -->
+          <div class="bg-and-text-row">
+            <div class="bg-color-group">
+              <label>Background</label>
+              <div class="color-input-container">
+                <input type="color" id="bgColorPicker" value="#000000" />
+                <input type="text" id="bgColorHex" value="#000000" maxlength="7" placeholder="#000000" />
+              </div>
             </div>
-          </div>
 
-          <div class="bg-color-group">
-            <label>Background</label>
-            <div class="background-toggle">
-              <button type="button" class="bg-option active" data-color="#000000">Black</button>
-              <button type="button" class="bg-option" data-color="#ffffff">White</button>
+            <div class="text-color-group" id="textColorGroup">
+              <label>Text Color</label>
+              <div class="color-input-container">
+                <input type="color" id="textColorPicker" value="#ffffff" />
+                <input type="text" id="textColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff" />
+              </div>
             </div>
           </div>
         </div>
