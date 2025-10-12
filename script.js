@@ -5,15 +5,11 @@ const convertBtn     = document.getElementById("convertBtn");
 const asciiOutput    = document.getElementById("asciiOutput");
 const resolutionSlider = document.getElementById("resolutionSlider");
 const resolutionValue = document.getElementById("resolutionValue");
-
 const textColorPicker = document.getElementById("textColorPicker");
 const textColorHex = document.getElementById("textColorHex");
 const textColorGroup = document.getElementById("textColorGroup");
-
-const bgColorPicker = document.getElementById("bgColorPicker");
-const bgColorHex = document.getElementById("bgColorHex");
-
 const modeOptions = document.querySelectorAll(".mode-option");
+const bgOptions = document.querySelectorAll(".bg-option");
 const copyBtn = document.getElementById("copyBtn");
 const downloadPngBtn = document.getElementById("downloadPngBtn");
 const asciiCanvas    = document.getElementById("asciiCanvas");
@@ -63,20 +59,15 @@ modeOptions.forEach(btn => {
 
     if (colorMode === "dynamic") {
       textColorGroup.classList.add("hidden");
-      // disable text color inputs while keeping bg editable
-      textColorPicker.disabled = true;
-      textColorHex.disabled = true;
     } else {
       textColorGroup.classList.remove("hidden");
-      textColorPicker.disabled = false;
-      textColorHex.disabled = false;
     }
 
     updatePreviewColors();
   });
 });
 
-// Sync color picker and hex input for text color
+// Sync color picker and hex input
 textColorPicker.addEventListener("input", (e) => {
   currentTextColor = e.target.value;
   textColorHex.value = currentTextColor;
@@ -93,21 +84,14 @@ textColorHex.addEventListener("input", (e) => {
   }
 });
 
-// Sync color picker and hex input for background color
-bgColorPicker.addEventListener("input", (e) => {
-  currentBgColor = e.target.value;
-  bgColorHex.value = currentBgColor;
-  updatePreviewColors();
-});
-
-bgColorHex.addEventListener("input", (e) => {
-  let hex = e.target.value;
-  if (!hex.startsWith("#")) hex = "#" + hex;
-  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
-    currentBgColor = hex;
-    bgColorPicker.value = hex;
+// Background color toggle
+bgOptions.forEach(btn => {
+  btn.addEventListener("click", () => {
+    bgOptions.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentBgColor = btn.dataset.color;
     updatePreviewColors();
-  }
+  });
 });
 
 function updatePreviewColors() {
@@ -189,8 +173,7 @@ function imageToAsciiFromImageElement(img, cols) {
   const tctx = tmp.getContext("2d");
 
   // Draw image into small canvas
-  // composite against currentBgColor if transparency exists
-  tctx.fillStyle = currentBgColor;
+  tctx.fillStyle = "white";
   tctx.fillRect(0, 0, cols, rows);
   tctx.drawImage(img, 0, 0, cols, rows);
 
@@ -206,11 +189,14 @@ function imageToAsciiFromImageElement(img, cols) {
       // If Transparent pixel, composite over preview background color (approx)
       let rr = r, gg = g, bb = b;
       if (a === 0) {
+        // parse hex background color
         const bg = hexToRgb(currentBgColor) || {r:0,g:0,b:0};
         rr = bg.r; gg = bg.g; bb = bg.b;
       }
+      // store RGB color for this position
       rowColors.push(`rgb(${rr},${gg},${bb})`);
 
+      // convert to perceived brightness
       const gray = 0.299 * rr + 0.587 * gg + 0.114 * bb;
       const idx  = Math.floor((gray / 255) * (CHARSET.length - 1));
       ascii += CHARSET[CHARSET.length - 1 - idx];
@@ -261,6 +247,7 @@ async function convertSelectedFile() {
 
   // Get the preview element's actual inner space (no padding) to center into
   const previewEl = document.querySelector('.preview');
+  // use clientWidth/Height to get available drawing box
   const availableWidth = previewEl.clientWidth;
   const availableHeight = previewEl.clientHeight;
 
@@ -364,10 +351,3 @@ downloadPngBtn.addEventListener("click", downloadPNG);
 
 // initialize empty output
 asciiOutput.textContent = "";
-
-// Initialize control states
-// Ensure bg/text inputs reflect initial state variables
-bgColorPicker.value = currentBgColor;
-bgColorHex.value = currentBgColor;
-textColorPicker.value = currentTextColor;
-textColorHex.value = currentTextColor;

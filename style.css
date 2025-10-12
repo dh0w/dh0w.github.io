@@ -173,19 +173,6 @@ label {
   margin-bottom: 0.36125rem;
 }
 
-/* Combined single row for background and text color */
-.bg-and-text-row {
-  display: flex;
-  gap: 0.7225rem;
-  align-items: start;
-}
-
-/* Make background left, text right; each takes equal space */
-.bg-color-group,
-.text-color-group {
-  flex: 1;
-}
-
 /* Mode toggle */
 .mode-toggle {
   display: flex;
@@ -248,7 +235,7 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 3px;
 }
 
-input[type="text"].hex-input {
+input[type="text"]#textColorHex {
   flex: 1;
   background: #2f2f2f;
   border: 1px solid #444;
@@ -260,13 +247,43 @@ input[type="text"].hex-input {
   transition: all 0.2s ease;
 }
 
-input[type="text"].hex-input:focus {
+input[type="text"]#textColorHex:focus {
   outline: none;
   border-color: #555;
   background: #333;
 }
 
-/* Hide text color controls in dynamic mode visually (class toggled) */
+/* Background toggle */
+.background-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.bg-option {
+  flex: 1;
+  padding: 0.6rem;
+  background: #2f2f2f;
+  color: #aaa;
+  border: 2px solid #444;
+  border-radius: 5.78px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.65rem;
+  min-width: auto;
+}
+
+.bg-option:hover {
+  border-color: #555;
+  background: #333;
+}
+
+.bg-option.active {
+  border-color: rgba(255, 200, 100, 0.6);
+  background: rgba(255, 200, 100, 0.1);
+  color: #ffc868;
+}
+
+/* Hide text color controls in dynamic mode */
 .text-color-group.hidden {
   opacity: 0.3;
   pointer-events: none;
@@ -496,9 +513,8 @@ canvas {
     max-width: 550px;
   }
 
-  .bg-and-text-row {
-    flex-direction: column;
-    gap: 0.5rem;
+  .color-controls {
+    grid-template-columns: 1fr;
   }
 }
 
