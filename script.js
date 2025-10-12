@@ -1,4 +1,5 @@
 const CHARSET_DEFAULT = "@#%*+=-:. ";
+const CHARSET_SYMBOLS = ",./;'[]\=-`<>?:\"{}|+_)(*&^%$#@!~ ";
 const CHARSET_NUMBERS = "0123456789 ";
 const CHARSET_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
 
@@ -23,8 +24,8 @@ const asciiCanvas    = document.getElementById("asciiCanvas");
 
 let lastAsciiText    = "";
 let lastAsciiMetrics = null;
-let currentTextColor = "#ffffff";
-let currentBgColor = "#000000";
+let currentTextColor = "#848484";
+let currentBgColor = "#0d0d0d";
 let colorMode = "static";
 let charsetMode = "default";
 let colorMap = null; // Store 2D color array (global)
@@ -144,6 +145,9 @@ charsetOptions.forEach(btn => {
       customCharsetInput.classList.add("disabled");
       
       switch(charsetMode) {
+        case "symbols":
+          CHARSET = processCustomCharset(CHARSET_SYMBOLS);
+          break;
         case "numbers":
           CHARSET = processCustomCharset(CHARSET_NUMBERS);
           break;

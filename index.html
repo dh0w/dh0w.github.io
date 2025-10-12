@@ -14,7 +14,11 @@
   </header>
 
   <div class="container">
-    <p class="subtitle">It's time. Create the cult of tomorrow now.</p>
+    <p class="subtitle">It's time. ACT to create the cult of tomorrow, today.</p>
+    <div class="instructions">
+      <p>1: Select the mode you would like to use, and input what you would like to convert.</p>
+      <p>2: Press 'Convert to ASCII', and copy the text, download the PNG, or screenshot it!</p>
+    </div>
 
     <div class="main-content">
       <div class="controls">
@@ -32,9 +36,9 @@
           <label>Resolution</label>
           <div class="slider-container">
             <div class="slider-wrapper">
-              <input type="range" id="resolutionSlider" min="50" max="430" value="200" />
+              <input type="range" id="resolutionSlider" min="50" max="430" value="107" />
             </div>
-            <span class="slider-value" id="resolutionValue">39%</span>
+            <span class="slider-value" id="resolutionValue">15%</span>
           </div>
         </div>
 
@@ -42,11 +46,12 @@
           <label>Character Set</label>
           <div class="charset-toggle">
             <button type="button" class="charset-option active" data-charset="default">Default</button>
+            <button type="button" class="charset-option" data-charset="symbols">Symbols</button>
             <button type="button" class="charset-option" data-charset="numbers">Numbers</button>
             <button type="button" class="charset-option" data-charset="letters">Letters</button>
             <button type="button" class="charset-option" data-charset="custom">Custom</button>
           </div>
-          <input type="text" id="customCharset" class="custom-charset-input" placeholder="Enter characters (dark to light)" disabled />
+          <input type="text" id="customCharset" class="custom-charset-input" placeholder="Enter characters (any order)" disabled />
         </div>
 
         <div class="control-group color-controls">
@@ -62,16 +67,16 @@
             <div class="bg-color-group">
               <label>Background</label>
               <div class="color-input-container">
-                <input type="color" id="bgColorPicker" value="#000000" />
-                <input type="text" id="bgColorHex" value="#000000" maxlength="7" placeholder="#000000" />
+                <input type="color" id="bgColorPicker" value="#0d0d0d" />
+                <input type="text" id="bgColorHex" value="#0d0d0d" maxlength="7" placeholder="#0d0d0d" />
               </div>
             </div>
 
             <div class="text-color-group" id="textColorGroup">
               <label>Text Color</label>
               <div class="color-input-container">
-                <input type="color" id="textColorPicker" value="#ffffff" />
-                <input type="text" id="textColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff" />
+                <input type="color" id="textColorPicker" value="#848484" />
+                <input type="text" id="textColorHex" value="#848484" maxlength="7" placeholder="#848484" />
               </div>
             </div>
           </div>
