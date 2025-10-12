@@ -1,4 +1,8 @@
-const CHARSET        = "@#%*+=-:. ";
+const CHARSET_DEFAULT = "@#%*+=-:. ";
+const CHARSET_NUMBERS = "0123456789 ";
+const CHARSET_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+
+let CHARSET = CHARSET_DEFAULT;
 const fileInput      = document.getElementById("fileInput");
 const fileLabel      = document.getElementById("fileLabel");
 const convertBtn     = document.getElementById("convertBtn");
@@ -11,6 +15,8 @@ const textColorGroup = document.getElementById("textColorGroup");
 const bgColorPicker = document.getElementById("bgColorPicker");
 const bgColorHex = document.getElementById("bgColorHex");
 const modeOptions = document.querySelectorAll(".mode-option");
+const charsetOptions = document.querySelectorAll(".charset-option");
+const customCharsetInput = document.getElementById("customCharset");
 const copyBtn = document.getElementById("copyBtn");
 const downloadPngBtn = document.getElementById("downloadPngBtn");
 const asciiCanvas    = document.getElementById("asciiCanvas");
@@ -20,7 +26,61 @@ let lastAsciiMetrics = null;
 let currentTextColor = "#ffffff";
 let currentBgColor = "#000000";
 let colorMode = "static";
+let charsetMode = "default";
 let colorMap = null; // Store 2D color array (global)
+
+// Function to calculate brightness of a character
+function calculateCharBrightness(char, fontFamily = "monospace", fontSize = 10) {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  
+  canvas.width = fontSize * 2;
+  canvas.height = fontSize * 2;
+  
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  ctx.fillStyle = "white";
+  ctx.font = `${fontSize}px ${fontFamily}`;
+  ctx.textBaseline = "top";
+  ctx.fillText(char, 0, 0);
+  
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+  
+  let totalBrightness = 0;
+  for (let i = 0; i < data.length; i += 4) {
+    totalBrightness += data[i]; // Red channel (since it's white on black, all channels are same)
+  }
+  
+  return totalBrightness / (data.length / 4); // Average brightness
+}
+
+// Function to process and sort custom charset
+function processCustomCharset(input) {
+  if (!input || input.trim() === "") {
+    return CHARSET_DEFAULT;
+  }
+  
+  // Remove duplicates and ensure space is included
+  let chars = [...new Set(input.split(''))];
+  
+  // Always ensure space is in the set
+  if (!chars.includes(' ')) {
+    chars.push(' ');
+  }
+  
+  // Calculate brightness for each character and sort from dark to light
+  const charBrightness = chars.map(char => ({
+    char: char,
+    brightness: calculateCharBrightness(char)
+  }));
+  
+  // Sort by brightness (darkest first)
+  charBrightness.sort((a, b) => b.brightness - a.brightness);
+  
+  return charBrightness.map(item => item.char).join('');
+}
 
 // Copy button functionality
 async function copyAsciiText() {
@@ -66,6 +126,42 @@ modeOptions.forEach(btn => {
 
     updatePreviewColors();
   });
+});
+
+// Charset toggle
+charsetOptions.forEach(btn => {
+  btn.addEventListener("click", () => {
+    charsetOptions.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    charsetMode = btn.dataset.charset;
+
+    if (charsetMode === "custom") {
+      customCharsetInput.disabled = false;
+      customCharsetInput.classList.remove("disabled");
+      CHARSET = processCustomCharset(customCharsetInput.value);
+    } else {
+      customCharsetInput.disabled = true;
+      customCharsetInput.classList.add("disabled");
+      
+      switch(charsetMode) {
+        case "numbers":
+          CHARSET = processCustomCharset(CHARSET_NUMBERS);
+          break;
+        case "letters":
+          CHARSET = processCustomCharset(CHARSET_LETTERS);
+          break;
+        default:
+          CHARSET = CHARSET_DEFAULT;
+      }
+    }
+  });
+});
+
+// Custom charset input
+customCharsetInput.addEventListener("input", (e) => {
+  if (charsetMode === "custom") {
+    CHARSET = processCustomCharset(e.target.value);
+  }
 });
 
 // Sync text color picker and hex input
