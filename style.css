@@ -160,16 +160,30 @@ label {
   align-items: start;
 }
 
-.color-mode-group,
-.text-color-group,
-.bg-color-group {
+.color-mode-group {
   display: flex;
   flex-direction: column;
 }
 
-.color-mode-group label,
-.text-color-group label,
-.bg-color-group label {
+.color-mode-group label {
+  margin-bottom: 0.36125rem;
+}
+
+/* Colors row - background and text color side by side */
+.colors-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7225rem;
+}
+
+.bg-color-group,
+.text-color-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.bg-color-group label,
+.text-color-group label {
   margin-bottom: 0.36125rem;
 }
 
@@ -235,7 +249,8 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 3px;
 }
 
-input[type="text"]#textColorHex {
+input[type="text"]#textColorHex,
+input[type="text"]#bgColorHex {
   flex: 1;
   background: #2f2f2f;
   border: 1px solid #444;
@@ -247,46 +262,21 @@ input[type="text"]#textColorHex {
   transition: all 0.2s ease;
 }
 
-input[type="text"]#textColorHex:focus {
+input[type="text"]#textColorHex:focus,
+input[type="text"]#bgColorHex:focus {
   outline: none;
   border-color: #555;
   background: #333;
-}
-
-/* Background toggle */
-.background-toggle {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.bg-option {
-  flex: 1;
-  padding: 0.6rem;
-  background: #2f2f2f;
-  color: #aaa;
-  border: 2px solid #444;
-  border-radius: 5.78px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.65rem;
-  min-width: auto;
-}
-
-.bg-option:hover {
-  border-color: #555;
-  background: #333;
-}
-
-.bg-option.active {
-  border-color: rgba(255, 200, 100, 0.6);
-  background: rgba(255, 200, 100, 0.1);
-  color: #ffc868;
 }
 
 /* Hide text color controls in dynamic mode */
 .text-color-group.hidden {
   opacity: 0.3;
   pointer-events: none;
+}
+
+.text-color-group.hidden input {
+  cursor: not-allowed;
 }
 
 /* Custom file input */

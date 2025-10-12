@@ -8,8 +8,9 @@ const resolutionValue = document.getElementById("resolutionValue");
 const textColorPicker = document.getElementById("textColorPicker");
 const textColorHex = document.getElementById("textColorHex");
 const textColorGroup = document.getElementById("textColorGroup");
+const bgColorPicker = document.getElementById("bgColorPicker");
+const bgColorHex = document.getElementById("bgColorHex");
 const modeOptions = document.querySelectorAll(".mode-option");
-const bgOptions = document.querySelectorAll(".bg-option");
 const copyBtn = document.getElementById("copyBtn");
 const downloadPngBtn = document.getElementById("downloadPngBtn");
 const asciiCanvas    = document.getElementById("asciiCanvas");
@@ -67,7 +68,7 @@ modeOptions.forEach(btn => {
   });
 });
 
-// Sync color picker and hex input
+// Sync text color picker and hex input
 textColorPicker.addEventListener("input", (e) => {
   currentTextColor = e.target.value;
   textColorHex.value = currentTextColor;
@@ -84,14 +85,21 @@ textColorHex.addEventListener("input", (e) => {
   }
 });
 
-// Background color toggle
-bgOptions.forEach(btn => {
-  btn.addEventListener("click", () => {
-    bgOptions.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentBgColor = btn.dataset.color;
+// Sync background color picker and hex input
+bgColorPicker.addEventListener("input", (e) => {
+  currentBgColor = e.target.value;
+  bgColorHex.value = currentBgColor;
+  updatePreviewColors();
+});
+
+bgColorHex.addEventListener("input", (e) => {
+  let hex = e.target.value;
+  if (!hex.startsWith("#")) hex = "#" + hex;
+  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+    currentBgColor = hex;
+    bgColorPicker.value = hex;
     updatePreviewColors();
-  });
+  }
 });
 
 function updatePreviewColors() {
