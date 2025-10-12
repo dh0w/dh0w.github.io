@@ -122,6 +122,7 @@ body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  position: relative; /* required for absolute centering of asciiOutput */
 }
 
 #asciiCanvas {
@@ -458,6 +459,7 @@ button:disabled {
   height: 100%;
 }
 
+/* ASCII output: positioned absolutely and centered with transform */
 pre#asciiOutput {
   background: transparent;
   color: #fff;
@@ -467,8 +469,8 @@ pre#asciiOutput {
   white-space: pre;
   padding: 0;
   margin: 0;
-  display: inline-block;
-  transform-origin: center center;
+  display: block;
+  /* position and transform are applied from JS to center and scale */
 }
 
 pre#asciiOutput:empty::after {

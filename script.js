@@ -27,7 +27,6 @@ async function copyAsciiText() {
   
   try {
     await navigator.clipboard.writeText(lastAsciiText);
-    // Visual feedback
     const originalHTML = copyBtn.innerHTML;
     const checkSVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <polyline points="20 6 9 17 4 12"></polyline>
@@ -234,7 +233,8 @@ async function convertSelectedFile() {
   const fontFamily = "monospace";
 
   const { ascii, rows, colorMap: returnedColorMap } = imageToAsciiFromImageElement(img, cols);
-  const trimmedAscii = ascii.replace(/ +$/gm, "");
+  // trim trailing spaces from each line
+  const trimmedAscii = ascii.split("\n").map(l => l.replace(/\s+$/,'')).join("\n");
   lastAsciiText = trimmedAscii;
   colorMap = returnedColorMap; // store globally for dynamic mode
   copyBtn.disabled = false;
@@ -245,24 +245,29 @@ async function convertSelectedFile() {
   const asciiW = cols * glyphW;
   const asciiH = rows * defaultFS;
 
-  // Get the preview container's actual dimensions (accounting for padding)
-  const previewContainer = document.querySelector('.preview');
-  const containerRect = previewContainer.getBoundingClientRect();
-  const availableWidth = containerRect.width - 40; // subtract padding
-  const availableHeight = containerRect.height - 40;
+  // Get the preview element's actual inner space (no padding) to center into
+  const previewEl = document.querySelector('.preview');
+  // use clientWidth/Height to get available drawing box
+  const availableWidth = previewEl.clientWidth;
+  const availableHeight = previewEl.clientHeight;
 
+  // compute scale to fit into preview while preserving aspect
   const scale = Math.min(availableWidth / asciiW, availableHeight / asciiH, 1);
 
+  // Apply CSS to asciiOutput to center using absolute centering and scale
   asciiOutput.style.cssText = `
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-origin: center center;
+    transform: translate(-50%,-50%) scale(${scale});
     font-family: ${fontFamily}, monospace;
     font-size: ${defaultFS}px;
     line-height: ${defaultFS}px;
     white-space: pre;
-    transform-origin: center center;
-    transform: scale(${scale});
-    display: inline-block;
-    max-width: 100%;
-    max-height: 100%;
+    display: block;
+    margin: 0;
+    padding: 0;
   `;
   // Set content according to mode
   if (colorMode === "dynamic" && colorMap) {
@@ -273,7 +278,7 @@ async function convertSelectedFile() {
   }
 
   // Update preview background
-  document.querySelector(".preview").style.background = currentBgColor;
+  previewEl.style.background = currentBgColor;
 
   const lines = trimmedAscii.split("\n").filter(l => l !== "");
   if (!lines.length) {
@@ -295,7 +300,7 @@ async function convertSelectedFile() {
 
   asciiCanvas.width  = Math.round(cssW * dpr);
   asciiCanvas.height = Math.round(cssH * dpr);
-  // Let CSS handle the display dimensions for proper scaling
+  // Let CSS handle the display dimensions for proper scaling (canvas is hidden in UI)
   asciiCanvas.style.removeProperty('width');
   asciiCanvas.style.removeProperty('height');
 
