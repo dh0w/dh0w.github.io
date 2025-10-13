@@ -341,9 +341,14 @@ async function convertSelectedFile() {
   const fontFamily = "monospace";
 
   const { ascii, rows, colorMap: returnedColorMap } = imageToAsciiFromImageElement(img, cols);
-  // trim trailing spaces from each line
-  const trimmedAscii = ascii.split("\n").map(l => l.replace(/\s+$/,'')).join("\n");
-  lastAsciiText = trimmedAscii;
+  // Don't trim for storage - keep the full width
+  const lines = ascii.split("\n");
+  // Find max length in the raw output
+  const maxLineLength = Math.max(...lines.map(l => l.length));
+  // Pad all lines to max length and then trim trailing newlines
+  const paddedAscii = lines.map(l => l.padEnd(maxLineLength, ' ')).join("\n").replace(/\n+$/, '');
+  
+  lastAsciiText = paddedAscii;
   colorMap = returnedColorMap; // store globally for dynamic mode
   copyBtn.disabled = false;
   downloadPngBtn.disabled = false;
@@ -382,30 +387,30 @@ async function convertSelectedFile() {
     applyDynamicColors();
   } else {
     asciiOutput.style.color = currentTextColor;
-    asciiOutput.textContent = trimmedAscii;
+    asciiOutput.textContent = paddedAscii;
   }
 
   // Update preview background
   previewEl.style.background = currentBgColor;
 
-  const lines = trimmedAscii.split("\n").filter(l => l !== "");
-  if (!lines.length) {
+  const canvasLines = paddedAscii.split("\n").filter(l => l !== "");
+  if (!canvasLines.length) {
     asciiCanvas.width = asciiCanvas.height = 1;
     lastAsciiMetrics = { cssWidth:1, cssHeight:1, dpr:window.devicePixelRatio||1 };
     return;
   }
 
-  const maxLen = Math.max(...lines.map(l => l.length));
-  const paddedLines = lines.map(line => line.padEnd(maxLen, ' '));
+  // All lines should already be padded to the same length (cols)
+  // Use cols as the definitive width
+  const paddedLines = canvasLines;
 
   // Prepare canvas for PNG export
   const tmpCanvas = document.createElement("canvas");
   const tmpCtx = tmpCanvas.getContext("2d");
   tmpCtx.font = `${defaultFS}px ${fontFamily}`;
   
-  // Calculate actual width based on the longest line
-  const longestLine = paddedLines.reduce((a, b) => a.length >= b.length ? a : b, '');
-  const cssW = Math.ceil(tmpCtx.measureText(longestLine).width);
+  // Calculate width based on cols * glyph width to ensure full coverage
+  const cssW = cols * glyphW;
   const cssH = paddedLines.length * defaultFS;
   const dpr = window.devicePixelRatio || 1;
 
