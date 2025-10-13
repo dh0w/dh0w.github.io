@@ -393,7 +393,12 @@ async function convertSelectedFile() {
   // Update preview background
   previewEl.style.background = currentBgColor;
 
-  const canvasLines = paddedAscii.split("\n").filter(l => l !== "");
+  const canvasLines = paddedAscii.split("\n");
+  // Remove any trailing empty lines
+  while (canvasLines.length > 0 && canvasLines[canvasLines.length - 1].trim() === '') {
+    canvasLines.pop();
+  }
+  
   if (!canvasLines.length) {
     asciiCanvas.width = asciiCanvas.height = 1;
     lastAsciiMetrics = { cssWidth:1, cssHeight:1, dpr:window.devicePixelRatio||1 };
