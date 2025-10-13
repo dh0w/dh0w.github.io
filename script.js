@@ -402,7 +402,10 @@ async function convertSelectedFile() {
   const tmpCanvas = document.createElement("canvas");
   const tmpCtx = tmpCanvas.getContext("2d");
   tmpCtx.font = `${defaultFS}px ${fontFamily}`;
-  const cssW = Math.ceil(tmpCtx.measureText(paddedLines[0]).width);
+  
+  // Calculate actual width based on the longest line
+  const longestLine = paddedLines.reduce((a, b) => a.length >= b.length ? a : b, '');
+  const cssW = Math.ceil(tmpCtx.measureText(longestLine).width);
   const cssH = paddedLines.length * defaultFS;
   const dpr = window.devicePixelRatio || 1;
 

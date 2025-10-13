@@ -565,13 +565,13 @@ canvas {
 
   .controls {
     width: 100%;
-    max-width: 550px;
+    max-width: 605px;
     height: auto;
   }
 
-  .preview {
+  .preview-container {
     width: 100%;
-    max-width: 550px;
+    max-width: 605px;
   }
 
   .color-controls {
