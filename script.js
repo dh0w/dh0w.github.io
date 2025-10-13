@@ -4,10 +4,15 @@ const CHARSET_NUMBERS = "0123456789 ";
 const CHARSET_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
 
 let CHARSET = CHARSET_DEFAULT;
-const fileInput      = document.getElementById("fileInput");
-const fileLabel      = document.getElementById("fileLabel");
-const convertBtn     = document.getElementById("convertBtn");
-const asciiOutput    = document.getElementById("asciiOutput");
+let appMode = "image"; // "image" or "text"
+let textStyle = "standard"; // "standard" or "italic"
+let textColorMode = "default"; // "default", "white", or "custom"
+
+const fileInput = document.getElementById("fileInput");
+const fileLabel = document.getElementById("fileLabel");
+const textInput = document.getElementById("textInput");
+const convertBtn = document.getElementById("convertBtn");
+const asciiOutput = document.getElementById("asciiOutput");
 const resolutionSlider = document.getElementById("resolutionSlider");
 const resolutionValue = document.getElementById("resolutionValue");
 const textColorPicker = document.getElementById("textColorPicker");
@@ -20,15 +25,145 @@ const charsetOptions = document.querySelectorAll(".charset-option");
 const customCharsetInput = document.getElementById("customCharset");
 const copyBtn = document.getElementById("copyBtn");
 const downloadPngBtn = document.getElementById("downloadPngBtn");
-const asciiCanvas    = document.getElementById("asciiCanvas");
+const asciiCanvas = document.getElementById("asciiCanvas");
 
-let lastAsciiText    = "";
+// Text mode elements
+const mainModeOptions = document.querySelectorAll(".main-mode-option");
+const textStyleOptions = document.querySelectorAll(".text-style-option");
+const textColorOptions = document.querySelectorAll(".text-color-option");
+const imageUploadGroup = document.getElementById("imageUploadGroup");
+const textInputGroup = document.getElementById("textInputGroup");
+const resolutionGroup = document.getElementById("resolutionGroup");
+const textStyleGroup = document.getElementById("textStyleGroup");
+const charsetGroup = document.getElementById("charsetGroup");
+const imageColorControls = document.getElementById("imageColorControls");
+const textColorControls = document.getElementById("textColorControls");
+const textCustomColors = document.getElementById("textCustomColors");
+const textBgColorPicker = document.getElementById("textBgColorPicker");
+const textBgColorHex = document.getElementById("textBgColorHex");
+const textTextColorPicker = document.getElementById("textTextColorPicker");
+const textTextColorHex = document.getElementById("textTextColorHex");
+
+let lastAsciiText = "";
 let lastAsciiMetrics = null;
 let currentTextColor = "#848484";
 let currentBgColor = "#0d0d0d";
 let colorMode = "static";
 let charsetMode = "default";
-let colorMap = null; // Store 2D color array (global)
+let colorMap = null;
+
+// Main mode toggle (Image/Text)
+mainModeOptions.forEach(btn => {
+  btn.addEventListener("click", () => {
+    mainModeOptions.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    appMode = btn.dataset.mainmode;
+    
+    if (appMode === "text") {
+      // Show text mode controls
+      imageUploadGroup.classList.add("hidden");
+      resolutionGroup.classList.add("hidden");
+      charsetGroup.classList.add("hidden");
+      imageColorControls.classList.add("hidden");
+      
+      textInputGroup.classList.remove("hidden");
+      textStyleGroup.style.display = "block";
+      textColorControls.classList.remove("hidden");
+    } else {
+      // Show image mode controls
+      textInputGroup.classList.add("hidden");
+      textStyleGroup.style.display = "none";
+      textColorControls.classList.add("hidden");
+      
+      imageUploadGroup.classList.remove("hidden");
+      resolutionGroup.classList.remove("hidden");
+      charsetGroup.classList.remove("hidden");
+      imageColorControls.classList.remove("hidden");
+    }
+    
+    // Clear output
+    asciiOutput.textContent = "";
+    lastAsciiText = "";
+    copyBtn.disabled = true;
+    downloadPngBtn.disabled = true;
+  });
+});
+
+// Text style toggle
+textStyleOptions.forEach(btn => {
+  btn.addEventListener("click", () => {
+    textStyleOptions.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    textStyle = btn.dataset.style;
+  });
+});
+
+// Text color mode toggle
+textColorOptions.forEach(btn => {
+  btn.addEventListener("click", () => {
+    textColorOptions.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    textColorMode = btn.dataset.textcolor;
+    
+    if (textColorMode === "custom") {
+      textCustomColors.style.display = "grid";
+    } else {
+      textCustomColors.style.display = "none";
+    }
+    
+    updateTextModeColors();
+  });
+});
+
+// Sync text mode custom color pickers
+textBgColorPicker.addEventListener("input", (e) => {
+  textBgColorHex.value = e.target.value;
+  updateTextModeColors();
+});
+
+textBgColorHex.addEventListener("input", (e) => {
+  let hex = e.target.value;
+  if (!hex.startsWith("#")) hex = "#" + hex;
+  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+    textBgColorPicker.value = hex;
+    updateTextModeColors();
+  }
+});
+
+textTextColorPicker.addEventListener("input", (e) => {
+  textTextColorHex.value = e.target.value;
+  updateTextModeColors();
+});
+
+textTextColorHex.addEventListener("input", (e) => {
+  let hex = e.target.value;
+  if (!hex.startsWith("#")) hex = "#" + hex;
+  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+    textTextColorPicker.value = hex;
+    updateTextModeColors();
+  }
+});
+
+function updateTextModeColors() {
+  if (appMode !== "text" || !lastAsciiText) return;
+  
+  const previewEl = document.querySelector(".preview");
+  let bgColor, textColor;
+  
+  if (textColorMode === "default") {
+    bgColor = "#000000";
+    textColor = "#ffffff";
+  } else if (textColorMode === "white") {
+    bgColor = "#ffffff";
+    textColor = "#000000";
+  } else {
+    bgColor = textBgColorHex.value;
+    textColor = textTextColorHex.value;
+  }
+  
+  previewEl.style.background = bgColor;
+  asciiOutput.style.color = textColor;
+}
 
 // Function to calculate brightness of a character
 function calculateCharBrightness(char, fontFamily = "monospace", fontSize = 10) {
@@ -51,10 +186,10 @@ function calculateCharBrightness(char, fontFamily = "monospace", fontSize = 10) 
   
   let totalBrightness = 0;
   for (let i = 0; i < data.length; i += 4) {
-    totalBrightness += data[i]; // Red channel (since it's white on black, all channels are same)
+    totalBrightness += data[i];
   }
   
-  return totalBrightness / (data.length / 4); // Average brightness
+  return totalBrightness / (data.length / 4);
 }
 
 // Function to process and sort custom charset
@@ -63,21 +198,17 @@ function processCustomCharset(input) {
     return CHARSET_DEFAULT;
   }
   
-  // Remove duplicates and ensure space is included
   let chars = [...new Set(input.split(''))];
   
-  // Always ensure space is in the set
   if (!chars.includes(' ')) {
     chars.push(' ');
   }
   
-  // Calculate brightness for each character and sort from dark to light
   const charBrightness = chars.map(char => ({
     char: char,
     brightness: calculateCharBrightness(char)
   }));
   
-  // Sort by brightness (darkest first)
   charBrightness.sort((a, b) => b.brightness - a.brightness);
   
   return charBrightness.map(item => item.char).join('');
@@ -105,14 +236,14 @@ async function copyAsciiText() {
 
 copyBtn.addEventListener("click", copyAsciiText);
 
-// Update slider value display (adjusted for new range)
+// Update slider value display
 resolutionSlider.addEventListener("input", (e) => {
   const value = parseInt(e.target.value);
   const percentage = Math.round(((value - 50) / (430 - 50)) * 100);
   resolutionValue.textContent = percentage + "%";
 });
 
-// Mode toggle
+// Mode toggle (for image mode)
 modeOptions.forEach(btn => {
   btn.addEventListener("click", () => {
     modeOptions.forEach(b => b.classList.remove("active"));
@@ -209,11 +340,9 @@ function updatePreviewColors() {
   if (!lastAsciiText) return;
 
   if (colorMode === "static" || !colorMap) {
-    // show plain text with static color
     asciiOutput.style.color = currentTextColor;
     asciiOutput.textContent = lastAsciiText;
   } else if (colorMode === "dynamic" && colorMap) {
-    // apply dynamic colors using spans and <br> for new lines
     applyDynamicColors();
   }
 }
@@ -236,12 +365,10 @@ function applyDynamicColors() {
     }
   }
 
-  // Use innerHTML so spans render; keep text color fallback
   asciiOutput.style.color = '';
   asciiOutput.innerHTML = html;
 }
 
-// Helper to escape HTML for characters that might conflict
 function escapeHtml(ch) {
   return ch
     .replace(/&/g, '&amp;')
@@ -268,19 +395,18 @@ function measureGlyphWidth(fontFamily, fontSizePx) {
 }
 
 function imageToAsciiFromImageElement(img, cols) {
-  const testW  = measureGlyphWidth("monospace", 10);
+  const testW = measureGlyphWidth("monospace", 10);
   const aspect = testW / 10;
-  const rows   = Math.max(
+  const rows = Math.max(
     1,
     Math.round(cols * aspect * (img.naturalHeight / img.naturalWidth) * 0.95)
   );
 
   const tmp = document.createElement("canvas");
-  tmp.width  = cols;
+  tmp.width = cols;
   tmp.height = rows;
   const tctx = tmp.getContext("2d");
 
-  // Draw image into small canvas
   tctx.fillStyle = "white";
   tctx.fillRect(0, 0, cols, rows);
   tctx.drawImage(img, 0, 0, cols, rows);
@@ -294,19 +420,15 @@ function imageToAsciiFromImageElement(img, cols) {
     for (let x = 0; x < cols; x++) {
       const i = (y * cols + x) * 4;
       const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
-      // If Transparent pixel, composite over preview background color (approx)
       let rr = r, gg = g, bb = b;
       if (a === 0) {
-        // parse hex background color
         const bg = hexToRgb(currentBgColor) || {r:0,g:0,b:0};
         rr = bg.r; gg = bg.g; bb = bg.b;
       }
-      // store RGB color for this position
       rowColors.push(`rgb(${rr},${gg},${bb})`);
 
-      // convert to perceived brightness
       const gray = 0.299 * rr + 0.587 * gg + 0.114 * bb;
-      const idx  = Math.floor((gray / 255) * (CHARSET.length - 1));
+      const idx = Math.floor((gray / 255) * (CHARSET.length - 1));
       ascii += CHARSET[CHARSET.length - 1 - idx];
     }
     localColorMap.push(rowColors);
@@ -326,6 +448,254 @@ function hexToRgb(hex) {
   return { r, g, b };
 }
 
+// TEXT TO ASCII OUTLINE CONVERSION
+function textToAsciiOutline(text, targetWidth) {
+  // Validate input - only printable ASCII characters
+  for (let char of text) {
+    const code = char.charCodeAt(0);
+    if (code < 32 || code > 126) {
+      throw new Error(`Unsupported character: "${char}". Only standard printable characters are supported.`);
+    }
+  }
+  
+  // Calculate font size to fit 80% of canvas width
+  const previewEl = document.querySelector('.preview');
+  const availableWidth = previewEl.clientWidth * 0.8;
+  
+  // Start with a base font size and measure
+  let fontSize = 100;
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  
+  // Determine font style
+  const fontStyle = textStyle === "italic" ? "italic " : "";
+  
+  // Binary search for optimal font size
+  let low = 10, high = 500;
+  while (high - low > 1) {
+    fontSize = Math.floor((low + high) / 2);
+    ctx.font = `${fontStyle}${fontSize}px Arial, sans-serif`;
+    const metrics = ctx.measureText(text);
+    const textWidth = metrics.width;
+    
+    if (textWidth < availableWidth) {
+      low = fontSize;
+    } else {
+      high = fontSize;
+    }
+  }
+  fontSize = low;
+  
+  // Set up canvas for text rendering
+  ctx.font = `${fontStyle}${fontSize}px Arial, sans-serif`;
+  const metrics = ctx.measureText(text);
+  const textWidth = Math.ceil(metrics.width);
+  const textHeight = Math.ceil(fontSize * 1.5);
+  
+  canvas.width = textWidth + 20;
+  canvas.height = textHeight + 20;
+  
+  // Draw text on canvas
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+  ctx.font = `${fontStyle}${fontSize}px Arial, sans-serif`;
+  ctx.textBaseline = "top";
+  ctx.fillText(text, 10, 10);
+  
+  // Get image data
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+  
+  // Find bounds of actual text
+  let minX = canvas.width, maxX = 0, minY = canvas.height, maxY = 0;
+  for (let y = 0; y < canvas.height; y++) {
+    for (let x = 0; x < canvas.width; x++) {
+      const i = (y * canvas.width + x) * 4;
+      if (data[i] > 128) { // White pixel
+        minX = Math.min(minX, x);
+        maxX = Math.max(maxX, x);
+        minY = Math.min(minY, y);
+        maxY = Math.max(maxY, y);
+      }
+    }
+  }
+  
+  // Calculate ASCII character dimensions
+  const charWidth = 6; // Approximate monospace character width
+  const charHeight = 10; // Approximate monospace character height
+  
+  const asciiWidth = Math.ceil((maxX - minX) / charWidth);
+  const asciiHeight = Math.ceil((maxY - minY) / charHeight);
+  
+  // Create grid to store which positions have text
+  const grid = Array(asciiHeight).fill(null).map(() => Array(asciiWidth).fill(false));
+  
+  // Map pixels to grid
+  for (let y = minY; y <= maxY; y++) {
+    for (let x = minX; x <= maxX; x++) {
+      const i = (y * canvas.width + x) * 4;
+      if (data[i] > 128) {
+        const gridX = Math.floor((x - minX) / charWidth);
+        const gridY = Math.floor((y - minY) / charHeight);
+        if (gridX >= 0 && gridX < asciiWidth && gridY >= 0 && gridY < asciiHeight) {
+          grid[gridY][gridX] = true;
+        }
+      }
+    }
+  }
+  
+  // Convert to ASCII outline by detecting edges
+  const asciiGrid = Array(asciiHeight).fill(null).map(() => Array(asciiWidth).fill(' '));
+  
+  for (let y = 0; y < asciiHeight; y++) {
+    for (let x = 0; x < asciiWidth; x++) {
+      if (grid[y][x]) {
+        // Check neighbors to determine edge character
+        const top = y > 0 ? grid[y-1][x] : false;
+        const bottom = y < asciiHeight - 1 ? grid[y+1][x] : false;
+        const left = x > 0 ? grid[y][x-1] : false;
+        const right = x < asciiWidth - 1 ? grid[y][x+1] : false;
+        
+        // Edge detection - only draw outline
+        const isEdge = !top || !bottom || !left || !right;
+        
+        if (isEdge) {
+          // Choose character based on neighboring pixels
+          if (!top && !bottom && (left || right)) {
+            asciiGrid[y][x] = '-';
+          } else if (!left && !right && (top || bottom)) {
+            asciiGrid[y][x] = '|';
+          } else if (!top && !left) {
+            asciiGrid[y][x] = ',';
+          } else if (!top && !right) {
+            asciiGrid[y][x] = '.';
+          } else if (!bottom && !left) {
+            asciiGrid[y][x] = '`';
+          } else if (!bottom && !right) {
+            asciiGrid[y][x] = '\'';
+          } else if (!top) {
+            asciiGrid[y][x] = '_';
+          } else if (!bottom) {
+            asciiGrid[y][x] = '^';
+          } else if (!left) {
+            asciiGrid[y][x] = '<';
+          } else if (!right) {
+            asciiGrid[y][x] = '>';
+          } else {
+            // Interior edge
+            asciiGrid[y][x] = '|';
+          }
+        }
+      }
+    }
+  }
+  
+  // Convert grid to string
+  let ascii = '';
+  for (let y = 0; y < asciiHeight; y++) {
+    ascii += asciiGrid[y].join('') + '\n';
+  }
+  
+  return { ascii: ascii.trimEnd(), cols: asciiWidth, rows: asciiHeight };
+}
+
+async function convertTextToAscii() {
+  const text = textInput.value.trim();
+  
+  if (!text) {
+    alert("Please enter some text first.");
+    return;
+  }
+  
+  if (text.length > 15) {
+    alert("Text is too long. Maximum 15 characters allowed.");
+    return;
+  }
+  
+  try {
+    const previewEl = document.querySelector('.preview');
+    const targetWidth = previewEl.clientWidth;
+    
+    const { ascii, cols, rows } = textToAsciiOutline(text, targetWidth);
+    
+    lastAsciiText = ascii;
+    colorMap = null; // No color mapping for text mode
+    copyBtn.disabled = false;
+    downloadPngBtn.disabled = false;
+    
+    // Get colors based on mode
+    let bgColor, textColor;
+    if (textColorMode === "default") {
+      bgColor = "#000000";
+      textColor = "#ffffff";
+    } else if (textColorMode === "white") {
+      bgColor = "#ffffff";
+      textColor = "#000000";
+    } else {
+      bgColor = textBgColorHex.value;
+      textColor = textTextColorHex.value;
+    }
+    
+    // Calculate display size
+    const defaultFS = 10;
+    const fontFamily = "monospace";
+    const glyphW = measureGlyphWidth(fontFamily, defaultFS);
+    const asciiW = cols * glyphW;
+    const asciiH = rows * defaultFS;
+    
+    const availableWidth = previewEl.clientWidth;
+    const availableHeight = previewEl.clientHeight;
+    const scale = Math.min(availableWidth / asciiW, availableHeight / asciiH, 1);
+    
+    // Apply styles
+    asciiOutput.style.cssText = `
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-origin: center center;
+      transform: translate(-50%,-50%) scale(${scale});
+      font-family: ${fontFamily}, monospace;
+      font-size: ${defaultFS}px;
+      line-height: ${defaultFS}px;
+      white-space: pre;
+      display: block;
+      margin: 0;
+      padding: 0;
+      color: ${textColor};
+    `;
+    
+    asciiOutput.textContent = ascii;
+    previewEl.style.background = bgColor;
+    
+    // Prepare canvas for PNG export
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = cols * glyphW;
+    const cssH = rows * defaultFS;
+    
+    asciiCanvas.width = Math.round(cssW * dpr);
+    asciiCanvas.height = Math.round(cssH * dpr);
+    
+    const ctx = asciiCanvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, cssW, cssH);
+    ctx.font = `${defaultFS}px ${fontFamily}`;
+    ctx.textBaseline = "top";
+    ctx.fillStyle = textColor;
+    
+    const lines = ascii.split('\n');
+    lines.forEach((line, y) => {
+      ctx.fillText(line, 0, y * defaultFS);
+    });
+    
+    lastAsciiMetrics = { cssWidth: cssW, cssHeight: cssH, dpr };
+    
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
 async function convertSelectedFile() {
   const file = fileInput.files[0];
   if (!file) {
@@ -341,15 +711,12 @@ async function convertSelectedFile() {
   const fontFamily = "monospace";
 
   const { ascii, rows, colorMap: returnedColorMap } = imageToAsciiFromImageElement(img, cols);
-  // Don't trim for storage - keep the full width
   const lines = ascii.split("\n");
-  // Find max length in the raw output
   const maxLineLength = Math.max(...lines.map(l => l.length));
-  // Pad all lines to max length and then trim trailing newlines
   const paddedAscii = lines.map(l => l.padEnd(maxLineLength, ' ')).join("\n").replace(/\n+$/, '');
   
   lastAsciiText = paddedAscii;
-  colorMap = returnedColorMap; // store globally for dynamic mode
+  colorMap = returnedColorMap;
   copyBtn.disabled = false;
   downloadPngBtn.disabled = false;
 
@@ -358,16 +725,12 @@ async function convertSelectedFile() {
   const asciiW = cols * glyphW;
   const asciiH = rows * defaultFS;
 
-  // Get the preview element's actual inner space (no padding) to center into
   const previewEl = document.querySelector('.preview');
-  // use clientWidth/Height to get available drawing box
   const availableWidth = previewEl.clientWidth;
   const availableHeight = previewEl.clientHeight;
 
-  // compute scale to fit into preview while preserving aspect
   const scale = Math.min(availableWidth / asciiW, availableHeight / asciiH, 1);
 
-  // Apply CSS to asciiOutput to center using absolute centering and scale
   asciiOutput.style.cssText = `
     position: absolute;
     left: 50%;
@@ -382,7 +745,7 @@ async function convertSelectedFile() {
     margin: 0;
     padding: 0;
   `;
-  // Set content according to mode
+  
   if (colorMode === "dynamic" && colorMap) {
     applyDynamicColors();
   } else {
@@ -390,11 +753,9 @@ async function convertSelectedFile() {
     asciiOutput.textContent = paddedAscii;
   }
 
-  // Update preview background
   previewEl.style.background = currentBgColor;
 
   const canvasLines = paddedAscii.split("\n");
-  // Remove any trailing empty lines
   while (canvasLines.length > 0 && canvasLines[canvasLines.length - 1].trim() === '') {
     canvasLines.pop();
   }
@@ -405,23 +766,18 @@ async function convertSelectedFile() {
     return;
   }
 
-  // All lines should already be padded to the same length (cols)
-  // Use cols as the definitive width
   const paddedLines = canvasLines;
 
-  // Prepare canvas for PNG export
   const tmpCanvas = document.createElement("canvas");
   const tmpCtx = tmpCanvas.getContext("2d");
   tmpCtx.font = `${defaultFS}px ${fontFamily}`;
   
-  // Calculate width based on cols * glyph width to ensure full coverage
   const cssW = cols * glyphW;
   const cssH = paddedLines.length * defaultFS;
   const dpr = window.devicePixelRatio || 1;
 
   asciiCanvas.width  = Math.round(cssW * dpr);
   asciiCanvas.height = Math.round(cssH * dpr);
-  // Let CSS handle the display dimensions for proper scaling (canvas is hidden in UI)
   asciiCanvas.style.removeProperty('width');
   asciiCanvas.style.removeProperty('height');
 
@@ -433,7 +789,6 @@ async function convertSelectedFile() {
   ctx.textBaseline = "top";
 
   if (colorMode === "dynamic" && colorMap) {
-    // Draw each glyph individually with its color
     for (let y = 0; y < paddedLines.length; y++) {
       const line = paddedLines[y];
       for (let x = 0; x < line.length; x++) {
@@ -444,7 +799,6 @@ async function convertSelectedFile() {
       }
     }
   } else {
-    // static drawing
     ctx.fillStyle = currentTextColor;
     paddedLines.forEach((line, y) => {
       const yOff = y * defaultFS;
@@ -455,9 +809,13 @@ async function convertSelectedFile() {
   lastAsciiMetrics = { cssWidth: cssW, cssHeight: cssH, dpr };
 }
 
-convertBtn.addEventListener("click", () =>
-  convertSelectedFile().catch(e => alert("Conversion error: " + e.message))
-);
+convertBtn.addEventListener("click", () => {
+  if (appMode === "text") {
+    convertTextToAscii().catch(e => alert("Conversion error: " + e.message));
+  } else {
+    convertSelectedFile().catch(e => alert("Conversion error: " + e.message));
+  }
+});
 
 function downloadPNG() {
   if (!lastAsciiMetrics) return;
@@ -470,5 +828,4 @@ function downloadPNG() {
 
 downloadPngBtn.addEventListener("click", downloadPNG);
 
-// initialize empty output
 asciiOutput.textContent = "";

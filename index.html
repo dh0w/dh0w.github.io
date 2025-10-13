@@ -23,6 +23,14 @@
     <div class="main-content">
       <div class="controls">
         <div class="control-group">
+          <label>Mode</label>
+          <div class="mode-toggle">
+            <button type="button" class="main-mode-option active" data-mainmode="image">Image</button>
+            <button type="button" class="main-mode-option" data-mainmode="text">Text</button>
+          </div>
+        </div>
+
+        <div class="control-group" id="imageUploadGroup">
           <label>Upload Image</label>
           <div class="file-input-wrapper">
             <input type="file" id="fileInput" accept="image/*" />
@@ -32,7 +40,12 @@
           </div>
         </div>
 
-        <div class="control-group">
+        <div class="control-group hidden" id="textInputGroup">
+          <label>Enter Text (max 15 characters)</label>
+          <input type="text" id="textInput" class="text-input" placeholder="Enter text here" maxlength="15" />
+        </div>
+
+        <div class="control-group" id="resolutionGroup">
           <label>Resolution</label>
           <div class="slider-container">
             <div class="slider-wrapper">
@@ -42,7 +55,15 @@
           </div>
         </div>
 
-        <div class="control-group">
+        <div class="control-group" id="textStyleGroup" style="display: none;">
+          <label>Text Style</label>
+          <div class="mode-toggle">
+            <button type="button" class="text-style-option active" data-style="standard">Standard</button>
+            <button type="button" class="text-style-option" data-style="italic">Italicized</button>
+          </div>
+        </div>
+
+        <div class="control-group" id="charsetGroup">
           <label>Character Set</label>
           <div class="charset-toggle">
             <button type="button" class="charset-option active" data-charset="default">Default</button>
@@ -54,7 +75,7 @@
           <input type="text" id="customCharset" class="custom-charset-input" placeholder="Enter characters (any order)" disabled />
         </div>
 
-        <div class="control-group color-controls">
+        <div class="control-group color-controls" id="imageColorControls">
           <div class="color-mode-group">
             <label>Color Mode</label>
             <div class="mode-toggle">
@@ -77,6 +98,35 @@
               <div class="color-input-container">
                 <input type="color" id="textColorPicker" value="#848484" />
                 <input type="text" id="textColorHex" value="#848484" maxlength="7" placeholder="#848484" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-group color-controls hidden" id="textColorControls">
+          <div class="color-mode-group">
+            <label>Color Mode</label>
+            <div class="mode-toggle">
+              <button type="button" class="text-color-option active" data-textcolor="default">Default</button>
+              <button type="button" class="text-color-option" data-textcolor="white">White</button>
+              <button type="button" class="text-color-option" data-textcolor="custom">Custom</button>
+            </div>
+          </div>
+
+          <div class="colors-row" id="textCustomColors" style="display: none;">
+            <div class="bg-color-group">
+              <label>Background</label>
+              <div class="color-input-container">
+                <input type="color" id="textBgColorPicker" value="#000000" />
+                <input type="text" id="textBgColorHex" value="#000000" maxlength="7" placeholder="#000000" />
+              </div>
+            </div>
+
+            <div class="text-color-group">
+              <label>Text Color</label>
+              <div class="color-input-container">
+                <input type="color" id="textTextColorPicker" value="#ffffff" />
+                <input type="text" id="textTextColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff" />
               </div>
             </div>
           </div>
