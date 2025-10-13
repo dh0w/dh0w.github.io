@@ -164,6 +164,134 @@ label {
   letter-spacing: 0.36125px;
 }
 
+/* Mode switch at top */
+.mode-switch {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.mode-switch-option {
+  flex: 1;
+  padding: 0.5rem 0.4rem;
+  background: #2f2f2f;
+  color: #aaa;
+  border: 2px solid #444;
+  border-radius: 5.78px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.6rem;
+  min-width: auto;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.mode-switch-option:hover {
+  border-color: #555;
+  background: #333;
+}
+
+.mode-switch-option.active {
+  border-color: rgba(255, 200, 100, 0.6);
+  background: rgba(255, 200, 100, 0.1);
+  color: #ffc868;
+}
+
+/* Text input for text mode */
+.text-input {
+  width: 100%;
+  background: #2f2f2f;
+  border: 2px dashed #444;
+  border-radius: 5.78px;
+  padding: 0.7225rem;
+  color: #e8e8e8;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: rgba(255, 200, 100, 0.6);
+  background: rgba(255, 200, 100, 0.05);
+}
+
+.text-input::placeholder {
+  color: #999;
+}
+
+/* Text style toggle */
+.text-style-toggle {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.text-style-option {
+  flex: 1;
+  padding: 0.5rem 0.4rem;
+  background: #2f2f2f;
+  color: #aaa;
+  border: 2px solid #444;
+  border-radius: 5.78px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.6rem;
+  min-width: auto;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.text-style-option:hover {
+  border-color: #555;
+  background: #333;
+}
+
+.text-style-option.active {
+  border-color: rgba(255, 200, 100, 0.6);
+  background: rgba(255, 200, 100, 0.1);
+  color: #ffc868;
+}
+
+/* Color preset toggle */
+.color-preset-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.color-preset-group label {
+  margin-bottom: 0.36125rem;
+}
+
+.color-preset-toggle {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.color-preset-option {
+  flex: 1;
+  padding: 0.5rem 0.4rem;
+  background: #2f2f2f;
+  color: #aaa;
+  border: 2px solid #444;
+  border-radius: 5.78px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.6rem;
+  min-width: auto;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.color-preset-option:hover {
+  border-color: #555;
+  background: #333;
+}
+
+.color-preset-option.active {
+  border-color: rgba(255, 200, 100, 0.6);
+  background: rgba(255, 200, 100, 0.1);
+  color: #ffc868;
+}
+
 /* Color controls - compact layout */
 .color-controls {
   display: grid;
