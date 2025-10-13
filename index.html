@@ -23,62 +23,35 @@
     <div class="main-content">
       <div class="controls">
         <div class="control-group">
-          <label>Conversion Mode</label>
-          <div class="mode-switch">
-            <button type="button" class="mode-switch-option active" data-conversion="image">Image to ASCII</button>
-            <button type="button" class="mode-switch-option" data-conversion="text">Text to ASCII</button>
+          <label>Upload Image</label>
+          <div class="file-input-wrapper">
+            <input type="file" id="fileInput" accept="image/*" />
+            <label for="fileInput" class="file-input-label" id="fileLabel">
+              Choose an image file
+            </label>
           </div>
         </div>
 
-        <!-- Image Mode Controls -->
-        <div id="imageModeControls">
-          <div class="control-group">
-            <label>Upload Image</label>
-            <div class="file-input-wrapper">
-              <input type="file" id="fileInput" accept="image/*" />
-              <label for="fileInput" class="file-input-label" id="fileLabel">
-                Choose an image file
-              </label>
+        <div class="control-group">
+          <label>Resolution</label>
+          <div class="slider-container">
+            <div class="slider-wrapper">
+              <input type="range" id="resolutionSlider" min="50" max="430" value="107" />
             </div>
-          </div>
-
-          <div class="control-group">
-            <label>Resolution</label>
-            <div class="slider-container">
-              <div class="slider-wrapper">
-                <input type="range" id="resolutionSlider" min="50" max="430" value="107" />
-              </div>
-              <span class="slider-value" id="resolutionValue">15%</span>
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label>Character Set</label>
-            <div class="charset-toggle">
-              <button type="button" class="charset-option active" data-charset="default">Default</button>
-              <button type="button" class="charset-option" data-charset="symbols">Symbols</button>
-              <button type="button" class="charset-option" data-charset="numbers">Numbers</button>
-              <button type="button" class="charset-option" data-charset="letters">Letters</button>
-              <button type="button" class="charset-option" data-charset="custom">Custom</button>
-            </div>
-            <input type="text" id="customCharset" class="custom-charset-input" placeholder="Enter characters (any order)" disabled />
+            <span class="slider-value" id="resolutionValue">15%</span>
           </div>
         </div>
 
-        <!-- Text Mode Controls -->
-        <div id="textModeControls" style="display: none;">
-          <div class="control-group">
-            <label>Enter Text</label>
-            <input type="text" id="textInput" class="text-input" placeholder="Enter text to convert..." maxlength="50" />
+        <div class="control-group">
+          <label>Character Set</label>
+          <div class="charset-toggle">
+            <button type="button" class="charset-option active" data-charset="default">Default</button>
+            <button type="button" class="charset-option" data-charset="symbols">Symbols</button>
+            <button type="button" class="charset-option" data-charset="numbers">Numbers</button>
+            <button type="button" class="charset-option" data-charset="letters">Letters</button>
+            <button type="button" class="charset-option" data-charset="custom">Custom</button>
           </div>
-
-          <div class="control-group">
-            <label>Text Style</label>
-            <div class="text-style-toggle">
-              <button type="button" class="text-style-option active" data-style="standard">Standard</button>
-              <button type="button" class="text-style-option" data-style="italic">Italic</button>
-            </div>
-          </div>
+          <input type="text" id="customCharset" class="custom-charset-input" placeholder="Enter characters (any order)" disabled />
         </div>
 
         <div class="control-group color-controls">
@@ -86,20 +59,11 @@
             <label>Color Mode</label>
             <div class="mode-toggle">
               <button type="button" class="mode-option active" data-mode="static">Static</button>
-              <button type="button" class="mode-option" data-mode="dynamic" id="dynamicModeBtn">Dynamic RGB</button>
+              <button type="button" class="mode-option" data-mode="dynamic">Dynamic RGB</button>
             </div>
           </div>
 
-          <div class="color-preset-group">
-            <label>Color Preset</label>
-            <div class="color-preset-toggle">
-              <button type="button" class="color-preset-option active" data-preset="default">Default</button>
-              <button type="button" class="color-preset-option" data-preset="white">White</button>
-              <button type="button" class="color-preset-option" data-preset="custom">Custom</button>
-            </div>
-          </div>
-
-          <div class="colors-row" id="customColorsRow">
+          <div class="colors-row">
             <div class="bg-color-group">
               <label>Background</label>
               <div class="color-input-container">
