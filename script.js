@@ -4,9 +4,9 @@ const CHARSET_NUMBERS = "0123456789 ";
 const CHARSET_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
 
 let CHARSET = CHARSET_DEFAULT;
-let appMode = "image"; // "image" or "text"
-let textStyle = "standard"; // "standard" or "italic"
-let textColorMode = "default"; // "default", "white", or "custom"
+let appMode = "image";
+let textStyle = "standard";
+let textColorMode = "default";
 
 const fileInput = document.getElementById("fileInput");
 const fileLabel = document.getElementById("fileLabel");
@@ -27,7 +27,6 @@ const copyBtn = document.getElementById("copyBtn");
 const downloadPngBtn = document.getElementById("downloadPngBtn");
 const asciiCanvas = document.getElementById("asciiCanvas");
 
-// Text mode elements
 const mainModeOptions = document.querySelectorAll(".main-mode-option");
 const textStyleOptions = document.querySelectorAll(".text-style-option");
 const textColorOptions = document.querySelectorAll(".text-color-option");
@@ -52,7 +51,103 @@ let colorMode = "static";
 let charsetMode = "default";
 let colorMap = null;
 
-// Main mode toggle (Image/Text)
+// ASCII Font Definitions
+const ASCII_FONT = {
+  'A': [" ,--. ", "//__\\\\", "|    |", "|    |"],
+  'B': ["|--. ", "|__> ", "|__> ", "|__/ "],
+  'C': [" ,--.", "/    ", "\\    ", " `--'"],
+  'D': ["|--. ", "|   \\", "|   /", "|--' "],
+  'E': ["|---", "|-- ", "|   ", "|___"],
+  'F': ["|---", "|-- ", "|   ", "|   "],
+  'G': [" ,--.", "/  _ ", "\\  |_", " `--'"],
+  'H': ["|   |", "|---|", "|   |", "|   |"],
+  'I': ["---", " | ", " | ", "---"],
+  'J': ["   |", "   |", "\\  |", " `-'"],
+  'K': ["|  /", "|< ", "|  \\", "|   \\"],
+  'L': ["|   ", "|   ", "|   ", "|___"],
+  'M': ["|\\ /|", "| V |", "|   |", "|   |"],
+  'N': ["|\\ |", "| \\|", "|  |", "|  |"],
+  'O': [" ,--.", "/    \\", "\\    /", " `--'"],
+  'P': ["|--. ", "|__/ ", "|    ", "|    "],
+  'Q': [" ,--.", "/    \\", "\\  |\\/", " `-|' "],
+  'R': ["|--. ", "|__/ ", "|  \\ ", "|   \\"],
+  'S': [" ,--.", "/  -'", "\\  -.", " `--'"],
+  'T': ["---", " | ", " | ", " | "],
+  'U': ["|   |", "|   |", "\\   /", " `-'"],
+  'V': ["|   |", "|   |", " \\ / ", "  V  "],
+  'W': ["|   |", "|   |", "| ^ |", "|/ \\|"],
+  'X': ["\\ /", " X ", "/ \\", "   "],
+  'Y': ["\\ /", " Y ", " | ", " | "],
+  'Z': ["|__", " / ", "/  ", "|__"],
+  'a': ["    ", " _. ", "(_|_", "  |"],
+  'b': ["|   ", "|_  ", "| \\ ", "|_/ "],
+  'c': ["   ", " _ ", "/  ", "\\_,"],
+  'd': ["   |", " _ |", "/ \\|", "\\_/|"],
+  'e': ["    ", " _  ", "/=\\ ", "\\_,-"],
+  'f': [" _", "/|", "=|", " |"],
+  'g': ["    ", " _  ", "(_| ", " _| "],
+  'h': ["|   ", "|_  ", "| | ", "| | "],
+  'i': [". ", "  ", "| ", "| "],
+  'j': [" .", "  ", " |", "_|"],
+  'k': ["|  ", "| /", "|< ", "| \\"],
+  'l': ["| ", "| ", "| ", "|_"],
+  'm': ["      ", " _ _  ", "| ' \\ ", "|_|_| "],
+  'n': ["    ", " _  ", "| | ", "|_| "],
+  'o': ["    ", " _  ", "/ \\ ", "\\_/ "],
+  'p': ["    ", " _  ", "| \\ ", "|_/ "],
+  'q': ["    ", " _  ", "/ | ", "\\_| "],
+  'r': ["   ", " _ ", "|  ", "|  "],
+  's': ["   ", " __", "|_ ", " _|"],
+  't': [" |", "_|", " |", " |"],
+  'u': ["    ", "    ", "| | ", "|_| "],
+  'v': ["    ", "    ", "\\ / ", " V  "],
+  'w': ["      ", "      ", "| | | ", "|_|_| "],
+  'x': ["   ", "\\ /", " X ", "/ \\"],
+  'y': ["    ", "    ", "\\ / ", " |  "],
+  'z': ["   ", " __", " / ", "/__|"],
+  '0': [" ,--.", "/  0 \\", "\\  0 /", " `--'"],
+  '1': [" / ", "/| ", " | ", " | "],
+  '2': [" _  ", " _> ", "/   ", "/___"],
+  '3': [" _  ", " _> ", " _> ", "/_/ "],
+  '4': ["   |", " | |", "|__|", "   |"],
+  '5': ["|__ ", "|_  ", " _> ", "/_/ "],
+  '6': [" ,_ ", "/   ", "|_> ", " \\_/"],
+  '7': ["|__", "  /", " / ", "/  "],
+  '8': [" _  ", "/=\\ ", "\\=/ ", " `  "],
+  '9': [" _  ", "/=\\ ", " _| ", "/_/ "],
+  ' ': ["  ", "  ", "  ", "  "],
+  '!': ["| ", "| ", "  ", ". "],
+  '?': [" _ ", " _>", " | ", " o "],
+  '.': ["  ", "  ", "  ", ". "],
+  ',': ["  ", "  ", "  ", ", "],
+  '-': ["   ", "---", "   ", "   "],
+  '_': ["   ", "   ", "   ", "___"],
+  '+': ["   ", " | ", "-+-", " | "],
+  '=': ["   ", "===", "===", "   "],
+  '/': ["  /", " / ", "/  ", "   "],
+  '\\': ["\\  ", " \\ ", "  \\", "   "],
+  '(': [" /", "( ", "( ", " \\"],
+  ')': ["\\  ", " ) ", " ) ", "/  "],
+  '[': ["|_", "| ", "| ", "|_"],
+  ']': ["_|", " |", " |", "_|"],
+  ':': ["  ", ". ", "  ", ". "],
+  ';': ["  ", ". ", "  ", ", "],
+  '\'': ["' ", "  ", "  ", "  "],
+  '"': ["\" \"", "   ", "   ", "   "],
+  '<': ["  /", " < ", "  \\", "   "],
+  '>': ["\\  ", " > ", "/  ", "   "],
+  '@': [" ,--.", "/ @@ \\", "\\ @@ /", " `--' "],
+  '#': [" | | ", "|###|", "|###|", " | | "],
+  '$': [" |__ ", "|/_  ", " _\\ |", " /_| "],
+  '%': ["o /", " / ", "/ o", "   "],
+  '^': [" ^ ", "   ", "   ", "   "],
+  '&': [" _  ", "/_\\ ", "|_\\_", "  & "],
+  '*': ["\\ /", " * ", "/ \\", "   "],
+  '|': ["| ", "| ", "| ", "| "],
+  '`': ["` ", "  ", "  ", "  "],
+  '~': [" ~ ", "   ", "   ", "   "]
+};
+
 mainModeOptions.forEach(btn => {
   btn.addEventListener("click", () => {
     mainModeOptions.forEach(b => b.classList.remove("active"));
@@ -60,28 +155,23 @@ mainModeOptions.forEach(btn => {
     appMode = btn.dataset.mainmode;
     
     if (appMode === "text") {
-      // Show text mode controls
       imageUploadGroup.classList.add("hidden");
       resolutionGroup.classList.add("hidden");
       charsetGroup.classList.add("hidden");
       imageColorControls.classList.add("hidden");
-      
       textInputGroup.classList.remove("hidden");
       textStyleGroup.style.display = "block";
       textColorControls.classList.remove("hidden");
     } else {
-      // Show image mode controls
       textInputGroup.classList.add("hidden");
       textStyleGroup.style.display = "none";
       textColorControls.classList.add("hidden");
-      
       imageUploadGroup.classList.remove("hidden");
       resolutionGroup.classList.remove("hidden");
       charsetGroup.classList.remove("hidden");
       imageColorControls.classList.remove("hidden");
     }
     
-    // Clear output
     asciiOutput.textContent = "";
     lastAsciiText = "";
     copyBtn.disabled = true;
@@ -89,7 +179,6 @@ mainModeOptions.forEach(btn => {
   });
 });
 
-// Text style toggle
 textStyleOptions.forEach(btn => {
   btn.addEventListener("click", () => {
     textStyleOptions.forEach(b => b.classList.remove("active"));
@@ -98,7 +187,6 @@ textStyleOptions.forEach(btn => {
   });
 });
 
-// Text color mode toggle
 textColorOptions.forEach(btn => {
   btn.addEventListener("click", () => {
     textColorOptions.forEach(b => b.classList.remove("active"));
@@ -115,7 +203,6 @@ textColorOptions.forEach(btn => {
   });
 });
 
-// Sync text mode custom color pickers
 textBgColorPicker.addEventListener("input", (e) => {
   textBgColorHex.value = e.target.value;
   updateTextModeColors();
@@ -165,7 +252,6 @@ function updateTextModeColors() {
   asciiOutput.style.color = textColor;
 }
 
-// Function to calculate brightness of a character
 function calculateCharBrightness(char, fontFamily = "monospace", fontSize = 10) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -192,7 +278,6 @@ function calculateCharBrightness(char, fontFamily = "monospace", fontSize = 10) 
   return totalBrightness / (data.length / 4);
 }
 
-// Function to process and sort custom charset
 function processCustomCharset(input) {
   if (!input || input.trim() === "") {
     return CHARSET_DEFAULT;
@@ -214,7 +299,6 @@ function processCustomCharset(input) {
   return charBrightness.map(item => item.char).join('');
 }
 
-// Copy button functionality
 async function copyAsciiText() {
   if (!lastAsciiText) return;
   
@@ -236,14 +320,12 @@ async function copyAsciiText() {
 
 copyBtn.addEventListener("click", copyAsciiText);
 
-// Update slider value display
 resolutionSlider.addEventListener("input", (e) => {
   const value = parseInt(e.target.value);
   const percentage = Math.round(((value - 50) / (430 - 50)) * 100);
   resolutionValue.textContent = percentage + "%";
 });
 
-// Mode toggle (for image mode)
 modeOptions.forEach(btn => {
   btn.addEventListener("click", () => {
     modeOptions.forEach(b => b.classList.remove("active"));
@@ -260,7 +342,6 @@ modeOptions.forEach(btn => {
   });
 });
 
-// Charset toggle
 charsetOptions.forEach(btn => {
   btn.addEventListener("click", () => {
     charsetOptions.forEach(b => b.classList.remove("active"));
@@ -292,14 +373,12 @@ charsetOptions.forEach(btn => {
   });
 });
 
-// Custom charset input
 customCharsetInput.addEventListener("input", (e) => {
   if (charsetMode === "custom") {
     CHARSET = processCustomCharset(e.target.value);
   }
 });
 
-// Sync text color picker and hex input
 textColorPicker.addEventListener("input", (e) => {
   currentTextColor = e.target.value;
   textColorHex.value = currentTextColor;
@@ -316,7 +395,6 @@ textColorHex.addEventListener("input", (e) => {
   }
 });
 
-// Sync background color picker and hex input
 bgColorPicker.addEventListener("input", (e) => {
   currentBgColor = e.target.value;
   bgColorHex.value = currentBgColor;
@@ -376,7 +454,6 @@ function escapeHtml(ch) {
     .replace(/>/g, '&gt;');
 }
 
-// Update file input label
 fileInput.addEventListener("change", (e) => {
   if (e.target.files.length > 0) {
     fileLabel.textContent = e.target.files[0].name;
@@ -448,156 +525,66 @@ function hexToRgb(hex) {
   return { r, g, b };
 }
 
-// TEXT TO ASCII OUTLINE CONVERSION
-function textToAsciiOutline(text, targetWidth) {
-  // Validate input - only printable ASCII characters
+function textToAsciiOutline(text) {
   for (let char of text) {
-    const code = char.charCodeAt(0);
-    if (code < 32 || code > 126) {
-      throw new Error(`Unsupported character: "${char}". Only standard printable characters are supported.`);
+    if (!ASCII_FONT[char]) {
+      throw new Error(`Unsupported character: "${char}". Only letters, numbers, and common symbols are supported.`);
     }
   }
   
-  // Calculate font size to fit 80% of canvas width
-  const previewEl = document.querySelector('.preview');
-  const availableWidth = previewEl.clientWidth * 0.8;
+  const patterns = text.split('').map(char => ASCII_FONT[char]);
+  const height = Math.max(...patterns.map(p => p.length));
   
-  // Start with a base font size and measure
-  let fontSize = 100;
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  
-  // Determine font style
-  const fontStyle = textStyle === "italic" ? "italic " : "";
-  
-  // Binary search for optimal font size
-  let low = 10, high = 500;
-  while (high - low > 1) {
-    fontSize = Math.floor((low + high) / 2);
-    ctx.font = `${fontStyle}${fontSize}px Arial, sans-serif`;
-    const metrics = ctx.measureText(text);
-    const textWidth = metrics.width;
-    
-    if (textWidth < availableWidth) {
-      low = fontSize;
-    } else {
-      high = fontSize;
-    }
-  }
-  fontSize = low;
-  
-  // Set up canvas for text rendering
-  ctx.font = `${fontStyle}${fontSize}px Arial, sans-serif`;
-  const metrics = ctx.measureText(text);
-  const textWidth = Math.ceil(metrics.width);
-  const textHeight = Math.ceil(fontSize * 1.5);
-  
-  canvas.width = textWidth + 20;
-  canvas.height = textHeight + 20;
-  
-  // Draw text on canvas
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "white";
-  ctx.font = `${fontStyle}${fontSize}px Arial, sans-serif`;
-  ctx.textBaseline = "top";
-  ctx.fillText(text, 10, 10);
-  
-  // Get image data
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data = imageData.data;
-  
-  // Find bounds of actual text
-  let minX = canvas.width, maxX = 0, minY = canvas.height, maxY = 0;
-  for (let y = 0; y < canvas.height; y++) {
-    for (let x = 0; x < canvas.width; x++) {
-      const i = (y * canvas.width + x) * 4;
-      if (data[i] > 128) { // White pixel
-        minX = Math.min(minX, x);
-        maxX = Math.max(maxX, x);
-        minY = Math.min(minY, y);
-        maxY = Math.max(maxY, y);
-      }
-    }
-  }
-  
-  // Calculate ASCII character dimensions
-  const charWidth = 6; // Approximate monospace character width
-  const charHeight = 10; // Approximate monospace character height
-  
-  const asciiWidth = Math.ceil((maxX - minX) / charWidth);
-  const asciiHeight = Math.ceil((maxY - minY) / charHeight);
-  
-  // Create grid to store which positions have text
-  const grid = Array(asciiHeight).fill(null).map(() => Array(asciiWidth).fill(false));
-  
-  // Map pixels to grid
-  for (let y = minY; y <= maxY; y++) {
-    for (let x = minX; x <= maxX; x++) {
-      const i = (y * canvas.width + x) * 4;
-      if (data[i] > 128) {
-        const gridX = Math.floor((x - minX) / charWidth);
-        const gridY = Math.floor((y - minY) / charHeight);
-        if (gridX >= 0 && gridX < asciiWidth && gridY >= 0 && gridY < asciiHeight) {
-          grid[gridY][gridX] = true;
-        }
-      }
-    }
-  }
-  
-  // Convert to ASCII outline by detecting edges
-  const asciiGrid = Array(asciiHeight).fill(null).map(() => Array(asciiWidth).fill(' '));
-  
-  for (let y = 0; y < asciiHeight; y++) {
-    for (let x = 0; x < asciiWidth; x++) {
-      if (grid[y][x]) {
-        // Check neighbors to determine edge character
-        const top = y > 0 ? grid[y-1][x] : false;
-        const bottom = y < asciiHeight - 1 ? grid[y+1][x] : false;
-        const left = x > 0 ? grid[y][x-1] : false;
-        const right = x < asciiWidth - 1 ? grid[y][x+1] : false;
+  const lines = [];
+  for (let row = 0; row < height; row++) {
+    let line = '';
+    for (let i = 0; i < patterns.length; i++) {
+      const pattern = patterns[i][row] || '';
+      
+      if (i === 0) {
+        line += pattern;
+      } else {
+        const prevPattern = patterns[i - 1][row] || '';
+        let overlap = 0;
+        const maxOverlap = Math.min(2, prevPattern.length, pattern.length);
         
-        // Edge detection - only draw outline
-        const isEdge = !top || !bottom || !left || !right;
-        
-        if (isEdge) {
-          // Choose character based on neighboring pixels
-          if (!top && !bottom && (left || right)) {
-            asciiGrid[y][x] = '-';
-          } else if (!left && !right && (top || bottom)) {
-            asciiGrid[y][x] = '|';
-          } else if (!top && !left) {
-            asciiGrid[y][x] = ',';
-          } else if (!top && !right) {
-            asciiGrid[y][x] = '.';
-          } else if (!bottom && !left) {
-            asciiGrid[y][x] = '`';
-          } else if (!bottom && !right) {
-            asciiGrid[y][x] = '\'';
-          } else if (!top) {
-            asciiGrid[y][x] = '_';
-          } else if (!bottom) {
-            asciiGrid[y][x] = '^';
-          } else if (!left) {
-            asciiGrid[y][x] = '<';
-          } else if (!right) {
-            asciiGrid[y][x] = '>';
-          } else {
-            // Interior edge
-            asciiGrid[y][x] = '|';
+        for (let o = 1; o <= maxOverlap; o++) {
+          const prevEnd = prevPattern.slice(-o);
+          const currStart = pattern.slice(0, o);
+          
+          let canShare = true;
+          for (let c = 0; c < o; c++) {
+            const pChar = prevEnd[c];
+            const cChar = currStart[c];
+            
+            if (pChar !== cChar && pChar !== ' ' && cChar !== ' ') {
+              canShare = false;
+              break;
+            }
+          }
+          
+          if (canShare) {
+            overlap = o;
           }
         }
+        
+        if (overlap > 0) {
+          line = line.slice(0, -overlap);
+          line += pattern;
+        } else {
+          line += pattern;
+        }
       }
     }
+    lines.push(line);
   }
   
-  // Convert grid to string
-  let ascii = '';
-  for (let y = 0; y < asciiHeight; y++) {
-    ascii += asciiGrid[y].join('') + '\n';
-  }
+  const ascii = lines.join('\n');
+  const asciiLines = ascii.split('\n');
+  const cols = Math.max(...asciiLines.map(l => l.length));
+  const rows = asciiLines.length;
   
-  return { ascii: ascii.trimEnd(), cols: asciiWidth, rows: asciiHeight };
+  return { ascii, cols, rows };
 }
 
 async function convertTextToAscii() {
@@ -614,17 +601,26 @@ async function convertTextToAscii() {
   }
   
   try {
-    const previewEl = document.querySelector('.preview');
-    const targetWidth = previewEl.clientWidth;
+    let { ascii, cols, rows } = textToAsciiOutline(text);
     
-    const { ascii, cols, rows } = textToAsciiOutline(text, targetWidth);
+    if (textStyle === "italic") {
+      const lines = ascii.split('\n');
+      const italicLines = [];
+      for (let i = 0; i < lines.length; i++) {
+        const spaces = Math.floor((rows - i - 1) * 0.3);
+        italicLines.push(' '.repeat(spaces) + lines[i]);
+      }
+      ascii = italicLines.join('\n');
+      
+      const asciiLines = ascii.split('\n');
+      cols = Math.max(...asciiLines.map(l => l.length));
+    }
     
     lastAsciiText = ascii;
-    colorMap = null; // No color mapping for text mode
+    colorMap = null;
     copyBtn.disabled = false;
     downloadPngBtn.disabled = false;
     
-    // Get colors based on mode
     let bgColor, textColor;
     if (textColorMode === "default") {
       bgColor = "#000000";
@@ -637,18 +633,17 @@ async function convertTextToAscii() {
       textColor = textTextColorHex.value;
     }
     
-    // Calculate display size
+    const previewEl = document.querySelector('.preview');
     const defaultFS = 10;
     const fontFamily = "monospace";
     const glyphW = measureGlyphWidth(fontFamily, defaultFS);
     const asciiW = cols * glyphW;
     const asciiH = rows * defaultFS;
     
-    const availableWidth = previewEl.clientWidth;
-    const availableHeight = previewEl.clientHeight;
+    const availableWidth = previewEl.clientWidth * 0.9;
+    const availableHeight = previewEl.clientHeight * 0.9;
     const scale = Math.min(availableWidth / asciiW, availableHeight / asciiH, 1);
     
-    // Apply styles
     asciiOutput.style.cssText = `
       position: absolute;
       left: 50%;
@@ -668,7 +663,6 @@ async function convertTextToAscii() {
     asciiOutput.textContent = ascii;
     previewEl.style.background = bgColor;
     
-    // Prepare canvas for PNG export
     const dpr = window.devicePixelRatio || 1;
     const cssW = cols * glyphW;
     const cssH = rows * defaultFS;
