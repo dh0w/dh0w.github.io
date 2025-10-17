@@ -161,23 +161,31 @@ function padToWidth(s, w) {
   if (s.length >= w) return s;
   return s + ' '.repeat(w - s.length);
 }
+// helper: right-trim trailing spaces from a string
+function rtrim(s) {
+  let end = s.length;
+  while (end > 0 && s[end - 1] === ' ') end--;
+  return s.slice(0, end);
+}
 
-// normalize glyph to exactly GLYPH_ROWS rows and GLYPH_CHAR_WIDTH columns
+// normalize glyph to exactly GLYPH_ROWS rows but trim trailing spaces on each row
 function normalizedGlyph(char) {
   const patt = ASCII_FONT[char];
   const normalized = [];
   if (!patt) {
-    for (let r = 0; r < GLYPH_ROWS; r++) normalized.push(' '.repeat(GLYPH_CHAR_WIDTH));
+    for (let r = 0; r < GLYPH_ROWS; r++) normalized.push('');
     return normalized;
   }
   for (let r = 0; r < GLYPH_ROWS; r++) {
     const row = patt[r] !== undefined ? patt[r] : '';
-    normalized.push(padToWidth(row, GLYPH_CHAR_WIDTH));
+    normalized.push(rtrim(row));
   }
   return normalized;
 }
 
-// Convert input text to a single ASCII-outline string with fixed-width glyphs and no spacing
+// Convert input text to a single ASCII-outline string with no spacing between glyphs.
+// Each glyph contributes its trimmed rows; rows are concatenated directly so glyphs butt up against one another.
+// slantSpacesPerRow controls linear slant (0 = none, 1 = small slant, etc).
 function textToAsciiOutlineFixed(text, slantSpacesPerRow = 0) {
   const patterns = [];
   for (let ch of text) {
@@ -189,7 +197,7 @@ function textToAsciiOutlineFixed(text, slantSpacesPerRow = 0) {
   for (let r = 0; r < GLYPH_ROWS; r++) {
     let line = '';
     for (let i = 0; i < patterns.length; i++) {
-      line += patterns[i][r];
+      line += patterns[i][r]; // directly append trimmed row (no padding)
     }
     baseRows.push(line);
   }
