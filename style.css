@@ -569,7 +569,6 @@ pre#asciiOutput {
   padding: 0;
   margin: 0;
   display: block;
-  text-align: left; /* left align so leading spaces (slant) render properly */
 }
 
 pre#asciiOutput:empty::after {

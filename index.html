@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ASCII Image Converter</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -15,6 +15,10 @@
 
   <div class="container">
     <p class="subtitle">It's time. ACT to create the cult of tomorrow, today.</p>
+    <div class="instructions">
+      <p>1: Select the mode you would like to use, and input what you would like to convert.</p>
+      <p>2: Press 'Convert to ASCII', and copy the text, download the PNG, or screenshot it!</p>
+    </div>
 
     <div class="main-content">
       <div class="controls">
@@ -30,13 +34,15 @@
           <label>Upload Image</label>
           <div class="file-input-wrapper">
             <input type="file" id="fileInput" accept="image/*" />
-            <label for="fileInput" class="file-input-label" id="fileLabel">Choose an image file</label>
+            <label for="fileInput" class="file-input-label" id="fileLabel">
+              Choose an image file
+            </label>
           </div>
         </div>
 
         <div class="control-group hidden" id="textInputGroup">
-          <label>Enter Text (single line, max 12 characters)</label>
-          <input type="text" id="textInput" class="text-input" placeholder="Enter text here" maxlength="12" />
+          <label>Enter Text (max 15 characters)</label>
+          <input type="text" id="textInput" class="text-input" placeholder="Enter text here" maxlength="15" />
         </div>
 
         <div class="control-group" id="resolutionGroup">
@@ -49,12 +55,24 @@
           </div>
         </div>
 
-        <div class="control-group" id="textStyleGroup" style="display:none;">
+        <div class="control-group" id="textStyleGroup" style="display: none;">
           <label>Text Style</label>
           <div class="mode-toggle">
-            <button type="button" class="text-style-option active" data-style="ogre">Ogre</button>
-            <button type="button" class="text-style-option" data-style="slant">Slant</button>
+            <button type="button" class="text-style-option active" data-style="standard">Standard</button>
+            <button type="button" class="text-style-option" data-style="italic">Italicized</button>
           </div>
+        </div>
+
+        <div class="control-group" id="charsetGroup">
+          <label>Character Set</label>
+          <div class="charset-toggle">
+            <button type="button" class="charset-option active" data-charset="default">Default</button>
+            <button type="button" class="charset-option" data-charset="symbols">Symbols</button>
+            <button type="button" class="charset-option" data-charset="numbers">Numbers</button>
+            <button type="button" class="charset-option" data-charset="letters">Letters</button>
+            <button type="button" class="charset-option" data-charset="custom">Custom</button>
+          </div>
+          <input type="text" id="customCharset" class="custom-charset-input" placeholder="Enter characters (any order)" disabled />
         </div>
 
         <div class="control-group color-controls" id="imageColorControls">
@@ -71,7 +89,7 @@
               <label>Background</label>
               <div class="color-input-container">
                 <input type="color" id="bgColorPicker" value="#0d0d0d" />
-                <input type="text" id="bgColorHex" value="#0d0d0d" maxlength="7" />
+                <input type="text" id="bgColorHex" value="#0d0d0d" maxlength="7" placeholder="#0d0d0d" />
               </div>
             </div>
 
@@ -79,7 +97,7 @@
               <label>Text Color</label>
               <div class="color-input-container">
                 <input type="color" id="textColorPicker" value="#848484" />
-                <input type="text" id="textColorHex" value="#848484" maxlength="7" />
+                <input type="text" id="textColorHex" value="#848484" maxlength="7" placeholder="#848484" />
               </div>
             </div>
           </div>
@@ -95,12 +113,12 @@
             </div>
           </div>
 
-          <div class="colors-row" id="textCustomColors" style="display:none;">
+          <div class="colors-row" id="textCustomColors" style="display: none;">
             <div class="bg-color-group">
               <label>Background</label>
               <div class="color-input-container">
                 <input type="color" id="textBgColorPicker" value="#000000" />
-                <input type="text" id="textBgColorHex" value="#000000" maxlength="7" />
+                <input type="text" id="textBgColorHex" value="#000000" maxlength="7" placeholder="#000000" />
               </div>
             </div>
 
@@ -108,7 +126,7 @@
               <label>Text Color</label>
               <div class="color-input-container">
                 <input type="color" id="textTextColorPicker" value="#ffffff" />
-                <input type="text" id="textTextColorHex" value="#ffffff" maxlength="7" />
+                <input type="text" id="textTextColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff" />
               </div>
             </div>
           </div>
@@ -117,8 +135,19 @@
         <div class="control-group">
           <div class="button-row">
             <button id="convertBtn">Convert to ASCII</button>
-            <button id="copyBtn" class="icon-button" title="Copy ASCII text" disabled>Copy</button>
-            <button id="downloadPngBtn" class="icon-button" title="Download as PNG" disabled>PNG</button>
+            <button id="copyBtn" class="icon-button" title="Copy ASCII text" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+            <button id="downloadPngBtn" class="icon-button" title="Download as PNG" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -139,9 +168,7 @@
     🔒 All image processing happens locally in your browser. Your images are never uploaded or saved.
   </div>
 
-  <!-- Figlet.js client-side -->
-  <script src="https://unpkg.com/figlet@1.2.4/lib/figlet.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/figlet/1.7.0/figlet.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
