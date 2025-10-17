@@ -51,101 +51,90 @@ let colorMode = "static";
 let charsetMode = "default";
 let colorMap = null;
 
-// ASCII Font Definitions
 const ASCII_FONT = {
-  'A': [" ___  ", "|__ \\ ", "|  | |", "|  |_|"],
-  'B': ["|___  ", "|   \\ ", "|___/ ", "|___/ "],
-  'C': [" ___ ", "/    ", "\\    ", " \\___|"],
-  'D': ["|___  ", "|   \\ ", "|   | ", "|___/ "],
-  'E': ["|___ ", "|___ ", "|    ", "|___ "],
-  'F': ["|___ ", "|___ ", "|    ", "|    "],
-  'G': [" ___ ", "/  _ ", "\\  |_", " \\___|"],
-  'H': ["|   |", "|___|", "|   |", "|   |"],
-  'I': ["___", " | ", " | ", "_|_"],
-  'J': ["   |", "   |", "\\  |", " \\_|"],
-  'K': ["|  /", "|_/ ", "|  \\", "|   \\"],
-  'L': ["|    ", "|    ", "|    ", "|___ "],
-  'M': ["|\\  /|", "| \\/ |", "|    |", "|    |"],
-  'N': ["|\\   |", "| \\  |", "|  \\ |", "|   \\|"],
-  'O': [" ___ ", "/   \\", "\\   /", " \\_/ "],
-  'P': ["|___  ", "|   \\ ", "|___/ ", "|     "],
-  'Q': [" ___ ", "/   \\", "\\  |/", " \\_|\\ "],
-  'R': ["|___  ", "|   \\ ", "|___/ ", "|   \\ "],
-  'S': [" ___ ", "/  __", "\\__  \\", " ___/ "],
+  'a': ["     ", " ___ ", "| .'|", "|__,|"],
+  'b': ["|    ", "| . \\", "| . /", "|___/"],
+  'c': ["     ", " ___ ", "|  _|", "|___|"],
+  'd': ["    |", " ___|", "| . |", "|___|"],
+  'e': ["     ", " ___ ", "| -_|", "|___|"],
+  'f': [" ___ ", "|  _|", "|  _|", "|_|  "],
+  'g': ["     ", " ___ ", "| . |", "|_  |"],
+  'h': ["|    ", "| -_|", "|   |", "|_|_|"],
+  'i': [" _ ", "   ", "| |", "|_|"],
+  'j': ["  _ ", "    ", "  | ", " _| "],
+  'k': ["|   ", "| < ", "| \\ ", "|_|\\ "],
+  'l': ["| ", "| ", "| ", "|_"],
+  'm': ["       ", " _____ ", "|     |", "|_|_|_|"],
+  'n': ["     ", " ___ ", "|   |", "|_|_|"],
+  'o': ["     ", " ___ ", "| . |", "|___|"],
+  'p': ["     ", " ___ ", "| . |", "|  _|"],
+  'q': ["     ", " ___ ", "| . |", "|_  |"],
+  'r': ["     ", " ___ ", "|  _|", "|_|  "],
+  's': ["     ", " ___ ", "|_ -|", "|___|"],
+  't': [" ___ ", "|  _|", "|  _|", "|_|  "],
+  'u': ["     ", "     ", "| | |", "|___|"],
+  'v': ["     ", "     ", "| | |", " \\_/ "],
+  'w': ["       ", "       ", "| | | |", "|_____|"],
+  'x': ["     ", "     ", "|-._|", "|___|"],
+  'y': ["     ", "     ", "| | |", "|_  |"],
+  'z': ["     ", " ___ ", "|_ /", "/___|"],
+  'A': [" ___ ", "|  _|", "|-_||", "|___|"],
+  'B': [" ___ ", "| . |", "| . |", "|___|"],
+  'C': [" ___ ", "|  _|", "|  _|", "|___|"],
+  'D': [" ___ ", "| . |", "| . |", "|___|"],
+  'E': [" ___ ", "| -_|", "| -_|", "|___|"],
+  'F': [" ___ ", "| -_|", "| -_|", "|_|  "],
+  'G': [" ___ ", "|  _|", "| . |", "|___|"],
+  'H': ["|   |", "| - |", "|   |", "|___|"],
+  'I': ["___", " | ", " | ", "|_|"],
+  'J': ["  _ ", "  | ", "  | ", " _| "],
+  'K': ["|   ", "| < ", "| \\ ", "|_|\\ "],
+  'L': ["|    ", "|    ", "|    ", "|____|"],
+  'M': [" _____ ", "|     |", "| | | |", "|_|_|_|"],
+  'N': [" _   _ ", "| \\_| |", "|     |", "|_|___|"],
+  'O': [" ___ ", "| . |", "| . |", "|___|"],
+  'P': [" ___ ", "| . |", "|  _|", "|_|  "],
+  'Q': [" ___ ", "| . |", "| . |", "|_  |"],
+  'R': [" ___ ", "| . |", "| <_|", "|_|\\ "],
+  'S': [" ___ ", "|_ -|", "|_ -|", "|___|"],
   'T': ["_____", "  |  ", "  |  ", "  |  "],
-  'U': ["|   |", "|   |", "\\   /", " \\_/ "],
+  'U': ["|   |", "|   |", "|   |", "|___|"],
   'V': ["|   |", "|   |", " \\ / ", "  V  "],
-  'W': ["|     |", "|     |", "| |_| |", "|/   \\|"],
-  'X': ["\\ /", " X ", "/ \\", "   "],
-  'Y': ["\\ /", " Y ", " | ", " | "],
-  'Z': ["|___", "  / ", " /  ", "/___|"],
-  'a': ["     ", "  _  ", " (_|_", "   | "],
-  'b': ["|    ", "|__  ", "|  \\ ", "|__/ "],
-  'c': ["    ", "  _ ", " /  ", " \\_,"],
-  'd': ["    |", "  _ |", " / \\|", " \\_/|"],
-  'e': ["     ", "  _  ", " /_\\_", " \\_,-"],
-  'f': ["  _", " /|", "==|", "  |"],
-  'g': ["     ", "  _  ", " (_| ", "  _| "],
-  'h': ["|    ", "|__  ", "|  | ", "|  | "],
-  'i': [" . ", "   ", " | ", " | "],
-  'j': ["  .", "   ", "  |", " _|"],
-  'k': ["|   ", "| / ", "|<  ", "| \\ "],
-  'l': [" | ", " | ", " | ", " |_"],
-  'm': ["       ", "  _ _  ", " | ' \\ ", " |_|_| "],
-  'n': ["     ", "  _  ", " | | ", " |_| "],
-  'o': ["     ", "  _  ", " / \\ ", " \\_/ "],
-  'p': ["     ", "  _  ", " | \\ ", " |_/ "],
-  'q': ["     ", "  _  ", " / | ", " \\_| "],
-  'r': ["    ", "  _ ", " |  ", " |  "],
-  's': ["    ", "  __", " |_ ", "  _|"],
-  't': ["  |", " _|", "  |", "  |"],
-  'u': ["     ", "     ", " | | ", " |_| "],
-  'v': ["     ", "     ", " \\ / ", "  V  "],
-  'w': ["        ", "        ", " | | |  ", " |_|_|_ "],
-  'x': ["    ", " \\/", " /\\", "    "],
-  'y': ["     ", "     ", " \\ / ", "  |_ "],
-  'z': ["    ", "  __", "  / ", " /__|"],
-  '0': [" ___ ", "/   \\", "\\   /", " \\_/ "],
-  '1': ["  / ", " /| ", "  | ", "  | "],
-  '2': [" __  ", "  _\\ ", " /   ", "/____|"],
-  '3': [" __  ", "  _\\ ", "  _\\ ", " __/ "],
-  '4': ["    |", "  | |", " |__|", "    |"],
-  '5': ["| __ ", "|__  ", "  _\\ ", " __/ "],
-  '6': ["  __ ", " /   ", "|__\\ ", " \\_/ "],
-  '7': ["|___", "  / ", " /  ", "/   "],
-  '8': [" __  ", "/  \\ ", "\\  / ", " \\_/ "],
-  '9': [" __  ", "/  \\ ", "\\_| ", " _/ "],
-  ' ': ["   ", "   ", "   ", "   "],
-  '!': [" | ", " | ", "   ", " . "],
-  '?': [" __ ", "  _\\", "  | ", "  o "],
-  '.': ["   ", "   ", "   ", " . "],
-  ',': ["   ", "   ", "   ", " , "],
+  'W': ["|     |", "|  |  |", "|  |  |", " \\_|_/ "],
+  'X': ["|   |", " \\ / ", " / \\ ", "|   |"],
+  'Y': ["|   |", " \\ / ", "  |  ", "  |  "],
+  'Z': ["|___|", "  / ", " /  ", "|___|"],
+  '0': [" ___ ", "|   |", "|   |", "|___|"],
+  '1': [" _ ", "| |", "| |", "|_|"],
+  '2': [" ___ ", " __|", "|__ ", "|___|"],
+  '3': [" ___ ", " __|", " __|", "|___|"],
+  '4': ["|   ", "| | ", "|___|", "  | "],
+  '5': [" ___ ", "|__ ", " __|", "|___|"],
+  '6': [" ___ ", "|__ ", "|  |", "|___|"],
+  '7': ["|___|", "  / ", " /  ", "|   "],
+  '8': [" ___ ", "| . |", "| . |", "|___|"],
+  '9': [" ___ ", "| . |", " __|", "|___|"],
+  ' ': ["  ", "  ", "  ", "  "],
+  '!': ["| ", "| ", "  ", "|."],
+  '?': [" ___ ", "  _|", " |  ", " o  "],
+  '.': ["  ", "  ", "  ", "|."],
+  ',': ["  ", "  ", "  ", "|,"],
   '-': ["    ", "____", "    ", "    "],
   '_': ["    ", "    ", "    ", "____"],
-  '+': ["    ", "  | ", " -+- ", "  | "],
-  '=': ["    ", " == ", " == ", "    "],
-  '/': ["   /", "  / ", " /  ", "    "],
-  '\\': [" \\  ", "  \\ ", "   \\", "    "],
-  '(': ["  /", " ( ", " ( ", "  \\"],
-  ')': [" \\  ", "  ) ", "  ) ", " /  "],
-  '[': [" |_", " | ", " | ", " |_"],
-  ']': [" _|", "  |", "  |", " _|"],
-  ':': ["   ", " . ", "   ", " . "],
-  ';': ["   ", " . ", "   ", " , "],
-  '\'': [" ' ", "   ", "   ", "   "],
-  '"': [" \" \"", "    ", "    ", "    "],
-  '<': ["   /", "  < ", "   \\", "    "],
-  '>': [" \\  ", "  > ", " /  ", "    "],
-  '@': [" ___ ", "/ @ \\", "\\ @ /", " \\_/ "],
-  '#': ["  |  | ", " |###| ", " |###| ", "  |  | "],
-  '$': ["  |___ ", " |/_   ", "  _\\ | ", "  /_|  "],
-  '%': [" o /", "  / ", " / o", "    "],
-  '^': ["  ^  ", "     ", "     ", "     "],
-  '&': ["  _  ", " /_\\ ", " |_\\_", "   & "],
-  '*': [" \\ /", "  * ", " / \\", "    "],
-  '|': [" | ", " | ", " | ", " | "],
-  '`': [" ` ", "   ", "   ", "   "],
-  '~': ["  ~  ", "     ", "     ", "     "]
+  '+': ["    ", " _|_", "|_|_|", " | "],
+  '=': ["    ", "____", "____", "    "],
+  '/': ["   /", "  / ", " /  ", "/   "],
+  '(': [" /", "| ", "| ", " \\"],
+  ')': ["\\ ", " |", " |", "/ "],
+  '[': ["_|", "| ", "| ", "|_"],
+  ']': ["|_", " |", " |", "_|"],
+  ':': [" _ ", "|.|", "   ", "|.|"],
+  ';': [" _ ", "|.|", "   ", "|,|"],
+  '&': [" ___ ", "|_  |", " _| |", "|___|"],
+  '@': [" ___ ", "| ._|", "| ._|", "|___|"],
+  '#': [" _ _ ", "|#|#|", "|#|#|", " | | "],
+  '*': ["    ", "\\ | /", " \\|/ ", "  *  "],
+  '%': ["o_/ ", " /  ", "/ _o", "    "]
 };
 
 mainModeOptions.forEach(btn => {
@@ -533,48 +522,14 @@ function textToAsciiOutline(text) {
   }
   
   const patterns = text.split('').map(char => ASCII_FONT[char]);
-  const height = Math.max(...patterns.map(p => p.length));
+  const height = 4;
   
   const lines = [];
   for (let row = 0; row < height; row++) {
     let line = '';
     for (let i = 0; i < patterns.length; i++) {
-      const pattern = patterns[i][row] || '';
-      
-      if (i === 0) {
-        line += pattern;
-      } else {
-        const prevPattern = patterns[i - 1][row] || '';
-        let overlap = 0;
-        const maxOverlap = Math.min(2, prevPattern.length, pattern.length);
-        
-        for (let o = 1; o <= maxOverlap; o++) {
-          const prevEnd = prevPattern.slice(-o);
-          const currStart = pattern.slice(0, o);
-          
-          let canShare = true;
-          for (let c = 0; c < o; c++) {
-            const pChar = prevEnd[c];
-            const cChar = currStart[c];
-            
-            if (pChar !== cChar && pChar !== ' ' && cChar !== ' ') {
-              canShare = false;
-              break;
-            }
-          }
-          
-          if (canShare) {
-            overlap = o;
-          }
-        }
-        
-        if (overlap > 0) {
-          line = line.slice(0, -overlap);
-          line += pattern;
-        } else {
-          line += pattern;
-        }
-      }
+      const pattern = patterns[i][row];
+      line += pattern;
     }
     lines.push(line);
   }
@@ -608,684 +563,8 @@ async function convertTextToAscii() {
       const italicLines = [];
       const maxSlant = lines.length;
       for (let i = 0; i < lines.length; i++) {
-        const spaces = Math.floor((maxSlant - i - 1) * 0.5);
+        const spaces = Math.floor((maxSlant - i - 1) * 0.8);
         italicLines.push(' '.repeat(Math.max(0, spaces)) + lines[i]);
-      }
-      ascii = italicLines.join('\n');
-      
-      const asciiLines = ascii.split('\n');
-      cols = Math.max(...asciiLines.map(l => l.length));
-    }
-    
-    lastAsciiText = ascii;
-    colorMap = null;
-    copyBtn.disabled = false;
-    downloadPngBtn.disabled = false;
-    
-    let bgColor, textColor;
-    if (textColorMode === "default") {
-      bgColor = "#000000";
-      textColor = "#ffffff";
-    } else if (textColorMode === "white") {
-      bgColor = "#ffffff";
-      textColor = "#000000";
-    } else {
-      bgColor = textBgColorHex.value;
-      textColor = textTextColorHex.value;
-    }
-    
-    const previewEl = document.querySelector('.preview');
-    const defaultFS = 10;
-    const fontFamily = "monospace";
-    const glyphW = measureGlyphWidth(fontFamily, defaultFS);
-    const asciiW = cols * glyphW;
-    const asciiH = rows * defaultFS;
-    
-    const availableWidth = previewEl.clientWidth * 0.9;
-    const availableHeight = previewEl.clientHeight * 0.9;
-    const scale = Math.min(availableWidth / asciiW, availableHeight / asciiH, 1);
-    
-    asciiOutput.style.cssText = `
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform-origin: center center;
-      transform: translate(-50%,-50%) scale(${scale});
-      font-family: ${fontFamily}, monospace;
-      font-size: ${defaultFS}px;
-      line-height: ${defaultFS}px;
-      white-space: pre;
-      display: block;
-      margin: 0;
-      padding: 0;
-      color: ${textColor};
-    `;
-    
-    asciiOutput.textContent = ascii;
-    previewEl.style.background = bgColor;
-    
-    const dpr = window.devicePixelRatio || 1;
-    const cssW = cols * glyphW;
-    const cssH = rows * defaultFS;
-    
-    asciiCanvas.width = Math.round(cssW * dpr);
-    asciiCanvas.height = Math.round(cssH * dpr);
-    
-    const ctx = asciiCanvas.getContext("2d");
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, cssW, cssH);
-    ctx.font = `${defaultFS}px ${fontFamily}`;
-    ctx.textBaseline = "top";
-    ctx.fillStyle = textColor;
-    
-    const lines = ascii.split('\n');
-    lines.forEach((line, y) => {
-      ctx.fillText(line, 0, y * defaultFS);
-    });
-    
-    lastAsciiMetrics = { cssWidth: cssW, cssHeight: cssH, dpr };
-    
-  } catch (err) {
-    alert(err.message);
-  }
-}
-
-async function convertSelectedFile() {
-  const file = fileInput.files[0];
-  if (!file) {
-    alert("Please select an image first.");
-    return;
-  }
-
-  const img = new Image();
-  img.src = URL.createObjectURL(file);
-  await img.decode().catch(() => {});
-
-  const cols = parseInt(resolutionSlider.value, 10);
-  const fontFamily = "monospace";
-
-  const { ascii, rows, colorMap: returnedColorMap } = imageToAsciiFromImageElement(img, cols);
-  const lines = ascii.split("\n");
-  const maxLineLength = Math.max(...lines.map(l => l.length));
-  const paddedAscii = lines.map(l => l.padEnd(maxLineLength, ' ')).join("\n").replace(/\n+$/, '');
-  
-  lastAsciiText = paddedAscii;
-  colorMap = returnedColorMap;
-  copyBtn.disabled = false;
-  downloadPngBtn.disabled = false;
-
-  const defaultFS = 10;
-  const glyphW = measureGlyphWidth(fontFamily, defaultFS);
-  const asciiW = cols * glyphW;
-  const asciiH = rows * defaultFS;
-
-  const previewEl = document.querySelector('.preview');
-  const availableWidth = previewEl.clientWidth;
-  const availableHeight = previewEl.clientHeight;
-
-  const scale = Math.min(availableWidth / asciiW, availableHeight / asciiH, 1);
-
-  asciiOutput.style.cssText = `
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform-origin: center center;
-    transform: translate(-50%,-50%) scale(${scale});
-    font-family: ${fontFamily}, monospace;
-    font-size: ${defaultFS}px;
-    line-height: ${defaultFS}px;
-    white-space: pre;
-    display: block;
-    margin: 0;
-    padding: 0;
-  `;
-  
-  if (colorMode === "dynamic" && colorMap) {
-    applyDynamicColors();
-  } else {
-    asciiOutput.style.color = currentTextColor;
-    asciiOutput.textContent = paddedAscii;
-  }
-
-  previewEl.style.background = currentBgColor;
-
-  const canvasLines = paddedAscii.split("\n");
-  while (canvasLines.length > 0 && canvasLines[canvasLines.length - 1].trim() === '') {
-    canvasLines.pop();
-  }
-  
-  if (!canvasLines.length) {
-    asciiCanvas.width = asciiCanvas.height = 1;
-    lastAsciiMetrics = { cssWidth:1, cssHeight:1, dpr:window.devicePixelRatio||1 };
-    return;
-  }
-
-  const paddedLines = canvasLines;
-
-  const tmpCanvas = document.createElement("canvas");
-  const tmpCtx = tmpCanvas.getContext("2d");
-  tmpCtx.font = `${defaultFS}px ${fontFamily}`;
-  
-  const cssW = cols * glyphW;
-  const cssH = paddedLines.length * defaultFS;
-  const dpr = window.devicePixelRatio || 1;
-
-  asciiCanvas.width  = Math.round(cssW * dpr);
-  asciiCanvas.height = Math.round(cssH * dpr);
-  asciiCanvas.style.removeProperty('width');
-  asciiCanvas.style.removeProperty('height');
-
-  const ctx = asciiCanvas.getContext("2d");
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.fillStyle = currentBgColor;
-  ctx.fillRect(0, 0, cssW, cssH);
-  ctx.font = `${defaultFS}px ${fontFamily}`;
-  ctx.textBaseline = "top";
-
-  if (colorMode === "dynamic" && colorMap) {
-    for (let y = 0; y < paddedLines.length; y++) {
-      const line = paddedLines[y];
-      for (let x = 0; x < line.length; x++) {
-        const ch = line[x];
-        const col = (colorMap[y] && colorMap[y][x]) ? colorMap[y][x] : currentTextColor;
-        ctx.fillStyle = col;
-        ctx.fillText(ch, x * glyphW, y * defaultFS);
-      }
-    }
-  } else {
-    ctx.fillStyle = currentTextColor;
-    paddedLines.forEach((line, y) => {
-      const yOff = y * defaultFS;
-      ctx.fillText(line, 0, yOff);
-    });
-  }
-
-  lastAsciiMetrics = { cssWidth: cssW, cssHeight: cssH, dpr };
-}
-
-convertBtn.addEventListener("click", () => {
-  if (appMode === "text") {
-    convertTextToAscii().catch(e => alert("Conversion error: " + e.message));
-  } else {
-    convertSelectedFile().catch(e => alert("Conversion error: " + e.message));
-  }
-});
-
-function downloadPNG() {
-  if (!lastAsciiMetrics) return;
-  const url = asciiCanvas.toDataURL("image/png");
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "ascii.png";
-  a.click();
-}
-
-downloadPngBtn.addEventListener("click", downloadPNG);
-
-asciiOutput.textContent = "";
-
-mainModeOptions.forEach(btn => {
-  btn.addEventListener("click", () => {
-    mainModeOptions.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    appMode = btn.dataset.mainmode;
-    
-    if (appMode === "text") {
-      imageUploadGroup.classList.add("hidden");
-      resolutionGroup.classList.add("hidden");
-      charsetGroup.classList.add("hidden");
-      imageColorControls.classList.add("hidden");
-      textInputGroup.classList.remove("hidden");
-      textStyleGroup.style.display = "block";
-      textColorControls.classList.remove("hidden");
-    } else {
-      textInputGroup.classList.add("hidden");
-      textStyleGroup.style.display = "none";
-      textColorControls.classList.add("hidden");
-      imageUploadGroup.classList.remove("hidden");
-      resolutionGroup.classList.remove("hidden");
-      charsetGroup.classList.remove("hidden");
-      imageColorControls.classList.remove("hidden");
-    }
-    
-    asciiOutput.textContent = "";
-    lastAsciiText = "";
-    copyBtn.disabled = true;
-    downloadPngBtn.disabled = true;
-  });
-});
-
-textStyleOptions.forEach(btn => {
-  btn.addEventListener("click", () => {
-    textStyleOptions.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    textStyle = btn.dataset.style;
-  });
-});
-
-textColorOptions.forEach(btn => {
-  btn.addEventListener("click", () => {
-    textColorOptions.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    textColorMode = btn.dataset.textcolor;
-    
-    if (textColorMode === "custom") {
-      textCustomColors.style.display = "grid";
-    } else {
-      textCustomColors.style.display = "none";
-    }
-    
-    updateTextModeColors();
-  });
-});
-
-textBgColorPicker.addEventListener("input", (e) => {
-  textBgColorHex.value = e.target.value;
-  updateTextModeColors();
-});
-
-textBgColorHex.addEventListener("input", (e) => {
-  let hex = e.target.value;
-  if (!hex.startsWith("#")) hex = "#" + hex;
-  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
-    textBgColorPicker.value = hex;
-    updateTextModeColors();
-  }
-});
-
-textTextColorPicker.addEventListener("input", (e) => {
-  textTextColorHex.value = e.target.value;
-  updateTextModeColors();
-});
-
-textTextColorHex.addEventListener("input", (e) => {
-  let hex = e.target.value;
-  if (!hex.startsWith("#")) hex = "#" + hex;
-  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
-    textTextColorPicker.value = hex;
-    updateTextModeColors();
-  }
-});
-
-function updateTextModeColors() {
-  if (appMode !== "text" || !lastAsciiText) return;
-  
-  const previewEl = document.querySelector(".preview");
-  let bgColor, textColor;
-  
-  if (textColorMode === "default") {
-    bgColor = "#000000";
-    textColor = "#ffffff";
-  } else if (textColorMode === "white") {
-    bgColor = "#ffffff";
-    textColor = "#000000";
-  } else {
-    bgColor = textBgColorHex.value;
-    textColor = textTextColorHex.value;
-  }
-  
-  previewEl.style.background = bgColor;
-  asciiOutput.style.color = textColor;
-}
-
-function calculateCharBrightness(char, fontFamily = "monospace", fontSize = 10) {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  
-  canvas.width = fontSize * 2;
-  canvas.height = fontSize * 2;
-  
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  ctx.fillStyle = "white";
-  ctx.font = `${fontSize}px ${fontFamily}`;
-  ctx.textBaseline = "top";
-  ctx.fillText(char, 0, 0);
-  
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data = imageData.data;
-  
-  let totalBrightness = 0;
-  for (let i = 0; i < data.length; i += 4) {
-    totalBrightness += data[i];
-  }
-  
-  return totalBrightness / (data.length / 4);
-}
-
-function processCustomCharset(input) {
-  if (!input || input.trim() === "") {
-    return CHARSET_DEFAULT;
-  }
-  
-  let chars = [...new Set(input.split(''))];
-  
-  if (!chars.includes(' ')) {
-    chars.push(' ');
-  }
-  
-  const charBrightness = chars.map(char => ({
-    char: char,
-    brightness: calculateCharBrightness(char)
-  }));
-  
-  charBrightness.sort((a, b) => b.brightness - a.brightness);
-  
-  return charBrightness.map(item => item.char).join('');
-}
-
-async function copyAsciiText() {
-  if (!lastAsciiText) return;
-  
-  try {
-    await navigator.clipboard.writeText(lastAsciiText);
-    const originalHTML = copyBtn.innerHTML;
-    const checkSVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <polyline points="20 6 9 17 4 12"></polyline>
-    </svg>`;
-    copyBtn.innerHTML = checkSVG;
-    
-    setTimeout(() => {
-      copyBtn.innerHTML = originalHTML;
-    }, 1500);
-  } catch (err) {
-    alert("Failed to copy text: " + err.message);
-  }
-}
-
-copyBtn.addEventListener("click", copyAsciiText);
-
-resolutionSlider.addEventListener("input", (e) => {
-  const value = parseInt(e.target.value);
-  const percentage = Math.round(((value - 50) / (430 - 50)) * 100);
-  resolutionValue.textContent = percentage + "%";
-});
-
-modeOptions.forEach(btn => {
-  btn.addEventListener("click", () => {
-    modeOptions.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    colorMode = btn.dataset.mode;
-
-    if (colorMode === "dynamic") {
-      textColorGroup.classList.add("hidden");
-    } else {
-      textColorGroup.classList.remove("hidden");
-    }
-
-    updatePreviewColors();
-  });
-});
-
-charsetOptions.forEach(btn => {
-  btn.addEventListener("click", () => {
-    charsetOptions.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    charsetMode = btn.dataset.charset;
-
-    if (charsetMode === "custom") {
-      customCharsetInput.disabled = false;
-      customCharsetInput.classList.remove("disabled");
-      CHARSET = processCustomCharset(customCharsetInput.value);
-    } else {
-      customCharsetInput.disabled = true;
-      customCharsetInput.classList.add("disabled");
-      
-      switch(charsetMode) {
-        case "symbols":
-          CHARSET = processCustomCharset(CHARSET_SYMBOLS);
-          break;
-        case "numbers":
-          CHARSET = processCustomCharset(CHARSET_NUMBERS);
-          break;
-        case "letters":
-          CHARSET = processCustomCharset(CHARSET_LETTERS);
-          break;
-        default:
-          CHARSET = CHARSET_DEFAULT;
-      }
-    }
-  });
-});
-
-customCharsetInput.addEventListener("input", (e) => {
-  if (charsetMode === "custom") {
-    CHARSET = processCustomCharset(e.target.value);
-  }
-});
-
-textColorPicker.addEventListener("input", (e) => {
-  currentTextColor = e.target.value;
-  textColorHex.value = currentTextColor;
-  updatePreviewColors();
-});
-
-textColorHex.addEventListener("input", (e) => {
-  let hex = e.target.value;
-  if (!hex.startsWith("#")) hex = "#" + hex;
-  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
-    currentTextColor = hex;
-    textColorPicker.value = hex;
-    updatePreviewColors();
-  }
-});
-
-bgColorPicker.addEventListener("input", (e) => {
-  currentBgColor = e.target.value;
-  bgColorHex.value = currentBgColor;
-  updatePreviewColors();
-});
-
-bgColorHex.addEventListener("input", (e) => {
-  let hex = e.target.value;
-  if (!hex.startsWith("#")) hex = "#" + hex;
-  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
-    currentBgColor = hex;
-    bgColorPicker.value = hex;
-    updatePreviewColors();
-  }
-});
-
-function updatePreviewColors() {
-  const previewEl = document.querySelector(".preview");
-  previewEl.style.background = currentBgColor;
-
-  if (!lastAsciiText) return;
-
-  if (colorMode === "static" || !colorMap) {
-    asciiOutput.style.color = currentTextColor;
-    asciiOutput.textContent = lastAsciiText;
-  } else if (colorMode === "dynamic" && colorMap) {
-    applyDynamicColors();
-  }
-}
-
-function applyDynamicColors() {
-  if (!colorMap || !lastAsciiText) return;
-
-  const lines = lastAsciiText.split('\n');
-  let html = '';
-
-  for (let y = 0; y < lines.length; y++) {
-    const line = lines[y];
-    for (let x = 0; x < line.length; x++) {
-      const char = line[x] === ' ' ? '&nbsp;' : escapeHtml(line[x]);
-      const color = (colorMap[y] && colorMap[y][x]) ? colorMap[y][x] : currentTextColor;
-      html += `<span style="color:${color};">` + char + `</span>`;
-    }
-    if (y < lines.length - 1) {
-      html += '<br>';
-    }
-  }
-
-  asciiOutput.style.color = '';
-  asciiOutput.innerHTML = html;
-}
-
-function escapeHtml(ch) {
-  return ch
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
-fileInput.addEventListener("change", (e) => {
-  if (e.target.files.length > 0) {
-    fileLabel.textContent = e.target.files[0].name;
-    fileLabel.classList.add("has-file");
-  } else {
-    fileLabel.textContent = "Choose an image file";
-    fileLabel.classList.remove("has-file");
-  }
-});
-
-function measureGlyphWidth(fontFamily, fontSizePx) {
-  const cvs = document.createElement("canvas");
-  const ctx = cvs.getContext("2d");
-  ctx.font = `${fontSizePx}px ${fontFamily}`;
-  return Math.ceil(ctx.measureText("@").width);
-}
-
-function imageToAsciiFromImageElement(img, cols) {
-  const testW = measureGlyphWidth("monospace", 10);
-  const aspect = testW / 10;
-  const rows = Math.max(
-    1,
-    Math.round(cols * aspect * (img.naturalHeight / img.naturalWidth) * 0.95)
-  );
-
-  const tmp = document.createElement("canvas");
-  tmp.width = cols;
-  tmp.height = rows;
-  const tctx = tmp.getContext("2d");
-
-  tctx.fillStyle = "white";
-  tctx.fillRect(0, 0, cols, rows);
-  tctx.drawImage(img, 0, 0, cols, rows);
-
-  const data = tctx.getImageData(0, 0, cols, rows).data;
-  let ascii = "";
-  const localColorMap = [];
-
-  for (let y = 0; y < rows; y++) {
-    const rowColors = [];
-    for (let x = 0; x < cols; x++) {
-      const i = (y * cols + x) * 4;
-      const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
-      let rr = r, gg = g, bb = b;
-      if (a === 0) {
-        const bg = hexToRgb(currentBgColor) || {r:0,g:0,b:0};
-        rr = bg.r; gg = bg.g; bb = bg.b;
-      }
-      rowColors.push(`rgb(${rr},${gg},${bb})`);
-
-      const gray = 0.299 * rr + 0.587 * gg + 0.114 * bb;
-      const idx = Math.floor((gray / 255) * (CHARSET.length - 1));
-      ascii += CHARSET[CHARSET.length - 1 - idx];
-    }
-    localColorMap.push(rowColors);
-    ascii += "\n";
-  }
-
-  return { ascii, cols, rows, colorMap: localColorMap };
-}
-
-function hexToRgb(hex) {
-  if (!hex) return null;
-  const m = hex.replace('#','');
-  if (m.length !== 6) return null;
-  const r = parseInt(m.substring(0,2),16);
-  const g = parseInt(m.substring(2,4),16);
-  const b = parseInt(m.substring(4,6),16);
-  return { r, g, b };
-}
-
-function textToAsciiOutline(text) {
-  for (let char of text) {
-    if (!ASCII_FONT[char]) {
-      throw new Error(`Unsupported character: "${char}". Only letters, numbers, and common symbols are supported.`);
-    }
-  }
-  
-  const patterns = text.split('').map(char => ASCII_FONT[char]);
-  const height = Math.max(...patterns.map(p => p.length));
-  
-  const lines = [];
-  for (let row = 0; row < height; row++) {
-    let line = '';
-    for (let i = 0; i < patterns.length; i++) {
-      const pattern = patterns[i][row] || '';
-      
-      if (i === 0) {
-        line += pattern;
-      } else {
-        const prevPattern = patterns[i - 1][row] || '';
-        let overlap = 0;
-        const maxOverlap = Math.min(2, prevPattern.length, pattern.length);
-        
-        for (let o = 1; o <= maxOverlap; o++) {
-          const prevEnd = prevPattern.slice(-o);
-          const currStart = pattern.slice(0, o);
-          
-          let canShare = true;
-          for (let c = 0; c < o; c++) {
-            const pChar = prevEnd[c];
-            const cChar = currStart[c];
-            
-            if (pChar !== cChar && pChar !== ' ' && cChar !== ' ') {
-              canShare = false;
-              break;
-            }
-          }
-          
-          if (canShare) {
-            overlap = o;
-          }
-        }
-        
-        if (overlap > 0) {
-          line = line.slice(0, -overlap);
-          line += pattern;
-        } else {
-          line += pattern;
-        }
-      }
-    }
-    lines.push(line);
-  }
-  
-  const ascii = lines.join('\n');
-  const asciiLines = ascii.split('\n');
-  const cols = Math.max(...asciiLines.map(l => l.length));
-  const rows = asciiLines.length;
-  
-  return { ascii, cols, rows };
-}
-
-async function convertTextToAscii() {
-  const text = textInput.value.trim();
-  
-  if (!text) {
-    alert("Please enter some text first.");
-    return;
-  }
-  
-  if (text.length > 15) {
-    alert("Text is too long. Maximum 15 characters allowed.");
-    return;
-  }
-  
-  try {
-    let { ascii, cols, rows } = textToAsciiOutline(text);
-    
-    if (textStyle === "italic") {
-      const lines = ascii.split('\n');
-      const italicLines = [];
-      for (let i = 0; i < lines.length; i++) {
-        const spaces = Math.floor((rows - i - 1) * 0.3);
-        italicLines.push(' '.repeat(spaces) + lines[i]);
       }
       ascii = italicLines.join('\n');
       
