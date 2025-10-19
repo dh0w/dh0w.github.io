@@ -1289,15 +1289,14 @@ $     @
 `;
 
 // ===== LOAD FIGLET FONTS =====
-function loadFigletFonts() {
-  try {
-    figlet.parseFont('Ogre', OGRE_FONT);
-    figlet.parseFont('Slant', SLANT_FONT);
-    console.log('Figlet fonts loaded successfully');
-  } catch (error) {
-    console.error('Error parsing figlet fonts:', error);
-    alert(`Error loading fonts: ${error.message}`);
-  }
+// Parse fonts immediately when script loads
+try {
+  figlet.parseFont('Ogre', OGRE_FONT);
+  figlet.parseFont('Slant', SLANT_FONT);
+  console.log('Figlet fonts parsed successfully');
+} catch (error) {
+  console.error('Error parsing figlet fonts:', error);
+  alert(`Error loading fonts: ${error.message}`);
 }
 
 // ===== MODE SWITCHING =====
@@ -1684,24 +1683,19 @@ function hexToRgb(hex) {
 function textToAsciiOutline(text) {
   const fontName = textStyle === "italic" ? "Slant" : "Ogre";
   
-  try {
-    const ascii = figlet.textSync(text, {
-      font: fontName,
-      horizontalLayout: 'default',
-      verticalLayout: 'default',
-      width: 80,
-      whitespaceBreak: true
-    });
-    
-    const asciiLines = ascii.split('\n');
-    const cols = Math.max(...asciiLines.map(l => l.length));
-    const rows = asciiLines.length;
-    
-    return { ascii, cols, rows };
-  } catch (error) {
-    console.error('Figlet error:', error);
-    throw new Error(`Failed to convert text: ${error.message}`);
-  }
+  const ascii = figlet.textSync(text, {
+    font: fontName,
+    horizontalLayout: 'default',
+    verticalLayout: 'default',
+    width: 80,
+    whitespaceBreak: true
+  });
+  
+  const asciiLines = ascii.split('\n');
+  const cols = Math.max(...asciiLines.map(l => l.length));
+  const rows = asciiLines.length;
+  
+  return { ascii, cols, rows };
 }
 
 async function convertTextToAscii() {
@@ -1925,10 +1919,5 @@ function downloadPNG() {
 }
 
 downloadPngBtn.addEventListener("click", downloadPNG);
-
-// ===== INITIALIZATION =====
-window.addEventListener('load', () => {
-  loadFigletFonts();
-});
 
 asciiOutput.textContent = "";
