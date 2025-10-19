@@ -1289,20 +1289,20 @@ $     @
 /_/       @@
 `;
 
-// ===== LOAD FIGLET FONTS =====
-function loadFigletFonts() {
-  if (fontsLoaded) return;
+// // ===== LOAD FIGLET FONTS =====
+// function loadFigletFonts() {
+//   if (fontsLoaded) return;
   
-  try {
-    figlet.parseFont('Ogre', OGRE_FONT);
-    figlet.parseFont('Slant', SLANT_FONT);
-    fontsLoaded = true;
-    console.log('Figlet fonts loaded successfully');
-  } catch (error) {
-    console.error('Error parsing figlet fonts:', error);
-    alert(`Error loading fonts: ${error.message}`);
-  }
-}
+//   try {
+//     figlet.parseFont('Ogre', OGRE_FONT);
+//     figlet.parseFont('Slant', SLANT_FONT);
+//     fontsLoaded = true;
+//     console.log('Figlet fonts loaded successfully');
+//   } catch (error) {
+//     console.error('Error parsing figlet fonts:', error);
+//     alert(`Error loading fonts: ${error.message}`);
+//   }
+// }
 
 // ===== MODE SWITCHING =====
 mainModeOptions.forEach(btn => {
@@ -1934,9 +1934,9 @@ function downloadPNG() {
 
 downloadPngBtn.addEventListener("click", downloadPNG);
 
-// ===== INITIALIZATION =====
-window.addEventListener('load', () => {
-  loadFigletFonts();
-});
+// // ===== INITIALIZATION =====
+// window.addEventListener('load', () => {
+//   loadFigletFonts();
+// });
 
 asciiOutput.textContent = "";
