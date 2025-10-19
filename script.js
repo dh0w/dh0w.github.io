@@ -52,7 +52,6 @@ let colorMode = "static";
 let charsetMode = "default";
 let colorMap = null;
 let fontsLoaded = false;
-let loadingFonts = false;
 
 // ===== EMBEDDED FIGLET FONTS =====
 const OGRE_FONT = `flf2a$ 6 5 20 15 13
@@ -1291,25 +1290,17 @@ $     @
 `;
 
 // ===== LOAD FIGLET FONTS =====
-async function loadFigletFonts() {
-  if (fontsLoaded || loadingFonts) return;
-  loadingFonts = true;
+function loadFigletFonts() {
+  if (fontsLoaded) return;
   
   try {
-    console.log('Loading embedded Ogre font...');
     figlet.parseFont('Ogre', OGRE_FONT);
-    console.log('Ogre font loaded');
-    
-    console.log('Loading embedded Slant font...');
     figlet.parseFont('Slant', SLANT_FONT);
-    console.log('Slant font loaded');
-    
     fontsLoaded = true;
-    console.log('All figlet fonts loaded successfully');
+    console.log('Figlet fonts loaded successfully');
   } catch (error) {
-    console.error('Error loading figlet fonts:', error);
+    console.error('Error parsing figlet fonts:', error);
     alert(`Error loading fonts: ${error.message}`);
-    loadingFonts = false;
   }
 }
 
@@ -1732,18 +1723,6 @@ async function convertTextToAscii() {
   if (text.length > 15) {
     alert("Text is too long. Maximum 15 characters allowed.");
     return;
-  }
-  
-  if (!fontsLoaded) {
-    convertBtn.disabled = true;
-    convertBtn.textContent = "Loading fonts...";
-    await loadFigletFonts();
-    convertBtn.disabled = false;
-    convertBtn.textContent = "Convert to ASCII";
-    
-    if (!fontsLoaded) {
-      return;
-    }
   }
   
   try {
