@@ -51,7 +51,6 @@ let currentBgColor = "#0d0d0d";
 let colorMode = "static";
 let charsetMode = "default";
 let colorMap = null;
-let fontsLoaded = false;
 
 // ===== EMBEDDED FIGLET FONTS =====
 const OGRE_FONT = `flf2a$ 6 5 20 15 13
@@ -1289,20 +1288,17 @@ $     @
 /_/       @@
 `;
 
-// // ===== LOAD FIGLET FONTS =====
-// function loadFigletFonts() {
-//   if (fontsLoaded) return;
-  
-//   try {
-//     figlet.parseFont('Ogre', OGRE_FONT);
-//     figlet.parseFont('Slant', SLANT_FONT);
-//     fontsLoaded = true;
-//     console.log('Figlet fonts loaded successfully');
-//   } catch (error) {
-//     console.error('Error parsing figlet fonts:', error);
-//     alert(`Error loading fonts: ${error.message}`);
-//   }
-// }
+// ===== LOAD FIGLET FONTS =====
+function loadFigletFonts() {
+  try {
+    figlet.parseFont('Ogre', OGRE_FONT);
+    figlet.parseFont('Slant', SLANT_FONT);
+    console.log('Figlet fonts loaded successfully');
+  } catch (error) {
+    console.error('Error parsing figlet fonts:', error);
+    alert(`Error loading fonts: ${error.message}`);
+  }
+}
 
 // ===== MODE SWITCHING =====
 mainModeOptions.forEach(btn => {
@@ -1686,10 +1682,6 @@ function hexToRgb(hex) {
 
 // ===== TEXT TO ASCII CONVERSION =====
 function textToAsciiOutline(text) {
-  if (!fontsLoaded) {
-    throw new Error('Fonts are still loading. Please wait a moment and try again.');
-  }
-  
   const fontName = textStyle === "italic" ? "Slant" : "Ogre";
   
   try {
@@ -1934,9 +1926,9 @@ function downloadPNG() {
 
 downloadPngBtn.addEventListener("click", downloadPNG);
 
-// // ===== INITIALIZATION =====
-// window.addEventListener('load', () => {
-//   loadFigletFonts();
-// });
+// ===== INITIALIZATION =====
+window.addEventListener('load', () => {
+  loadFigletFonts();
+});
 
 asciiOutput.textContent = "";
